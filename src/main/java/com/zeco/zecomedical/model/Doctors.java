@@ -2,9 +2,17 @@ package com.zeco.zecomedical.model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "doctors")
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@Data
 public class Doctors {
 
     @Id
@@ -21,4 +29,6 @@ public class Doctors {
     @Column(name = "speciality")
     private String speciality;
 
+    @Column(name = "email")
+    private String email;
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 
 @Data
@@ -17,6 +18,8 @@ public class UsersResponseDto {
 
         private String errorMessage = null;
         //private Boolean okk =false;
+
+        private UUID id;
 
         private String name;
 
@@ -35,6 +38,8 @@ public class UsersResponseDto {
         private Roles role;
 
         private Boolean isAuthenticated = false;
+
+        private  Boolean verified;
 
 
     }

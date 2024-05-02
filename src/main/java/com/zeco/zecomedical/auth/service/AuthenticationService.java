@@ -3,6 +3,7 @@ package com.zeco.zecomedical.auth.service;
 import com.zeco.zecomedical.auth.AuthDtos.SigninRequestDto;
 import com.zeco.zecomedical.auth.AuthDtos.SignoutResponseDto;
 import com.zeco.zecomedical.auth.AuthDtos.SignupResponseDto;
+import com.zeco.zecomedical.auth.verifyEmail.VerifyEmailService;
 import com.zeco.zecomedical.dto.UsersRequestDto;
 import com.zeco.zecomedical.dto.UsersResponseDto;
 import com.zeco.zecomedical.model.Users;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 
 @Service
@@ -36,6 +39,7 @@ import java.util.Optional;
 public class AuthenticationService {
 
     private  final UsersRepository usersRepository;
+    private final VerifyEmailService verifyEmailService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -45,11 +49,16 @@ public class AuthenticationService {
     private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
     SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
-    public SignupResponseDto signup(UsersRequestDto signupData){
+    public SignupResponseDto signup(UsersRequestDto signupData)  {
 
-        if(usersRepository.findByUsername(signupData.getUsername()).isPresent() || usersRepository.findByEmail(signupData.getEmail()).isPresent()){
+        if(usersRepository.findByEmail(signupData.getEmail()).isPresent()){
+            return new SignupResponseDto(HttpStatus.CONFLICT.value(), "email already exist");
+        }
 
-            return new SignupResponseDto(HttpStatus.CONFLICT.value(), "Account already exist");
+
+        if(usersRepository.findByUsername(signupData.getUsername()).isPresent() ){
+
+            return new SignupResponseDto(HttpStatus.CONFLICT.value(), "username already exist");
         }
 
 
@@ -65,12 +74,18 @@ public class AuthenticationService {
                 .email(signupData.getEmail())
                 .password(passwordEncoder.encode(signupData.getPassword()))
                 .role(signupData.getRole())
-                .isAuthenticated(false)
+                .isAuthenticated(false) // user has is logged out
+                .verified(false) // email is not verified
                 .build();
 
-        usersRepository.save(user);
 
-        return new SignupResponseDto(HttpStatus.CREATED.value(), "Account created successfully, proceed and login");
+        Users savedUser = usersRepository.save(user);
+
+        //Todo: create endpoint to verify emails ,seperate from the signup process.. like if user did not verify email after signup, and they come and login another day they should
+        //have the option to verify their email
+        verifyEmailService.saveAndSendEmailVerificationToken(savedUser);
+
+        return new SignupResponseDto(HttpStatus.CREATED.value(), "Account created successfully, proceed and verify your email");
 
     }
 
@@ -81,10 +96,20 @@ public class AuthenticationService {
             Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(signinData.getUsername(), signinData.getPassword());
             Authentication authenticationResponse = authenticationManager.authenticate(authenticationRequest);
 
+            //manually saving the session
             SecurityContext context = securityContextHolderStrategy.createEmptyContext();
             context.setAuthentication(authenticationResponse);
             this.securityContextHolderStrategy.setContext(context);
             securityContextRepository.saveContext(context, request, response);
+
+
+            String username = request.getUserPrincipal().getName();
+            Optional<Users> userData = usersRepository.findByUsername(username);
+            if(userData.isEmpty()) throw new RuntimeException("from checkSession method");
+
+            Users user = userData.get();
+            user.setIsAuthenticated(true);
+            usersRepository.save(user);
 
              return checkSession(request);
 
@@ -124,24 +149,26 @@ public class AuthenticationService {
         if( session != null){
 
            String username = request.getUserPrincipal().getName();
-
            Optional<Users> userData = usersRepository.findByUsername(username);
-
            if(userData.isEmpty()) throw new RuntimeException("from checkSession method");
 
            Users user = userData.get();
-           user.setIsAuthenticated(true);
-            Users user1 = usersRepository.save(user);
+           //user.setIsAuthenticated(true);
+            //Users user1 = usersRepository.save(user);
 
             return UsersResponseDto.builder()
-                    .name(user1.getName())
-                    .username(user1.getUsername())
-                    .gender(user1.getGender())
-                    .dob(user1.getDob())
-                    .address(user1.getAddress())
-                    .email(user1.getEmail())
-                    .role(user1.getRole())
-                    .isAuthenticated(true)
+                    .errorMessage(null)
+                    .id(user.getId())
+                    .name(user.getName())
+                    .username(user.getUsername())
+                    .gender(user.getGender())
+                    .dob(user.getDob())
+                    .address(user.getAddress())
+                    .email(user.getEmail())
+                    .role(user.getRole())
+                    .isAuthenticated(true) //user is login
+                    .verified(user.getVerified())
+
                     .build();
 
 

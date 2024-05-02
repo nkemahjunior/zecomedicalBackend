@@ -68,4 +68,7 @@ public class Users implements Serializable { //implementing Serializable so Spri
     @NonNull
     private Boolean isAuthenticated;
 
+    @Column(name = "verified")
+    private Boolean verified;
+
 }

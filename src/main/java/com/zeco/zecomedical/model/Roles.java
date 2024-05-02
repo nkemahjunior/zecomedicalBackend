@@ -21,4 +21,6 @@ public class Roles implements Serializable {
 
     @Column(name = "roles")
     private String roles;
+
+
 }

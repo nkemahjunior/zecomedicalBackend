@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +48,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);  http://localhost:5173
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST","DELETE","PUT"));
         configuration.setAllowedHeaders(Arrays.asList(
 
@@ -66,10 +67,16 @@ public class SecurityConfig {
         return source;
     }
 
+
+    /*
+     * NOTE when you signup, only CSRF token will be sent, no session id
+     * When you login, a SESSION ID and CSRF Token will be sent(if you dont have one yet)*/
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                //.sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) this is Default
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/auth/**").permitAll()
@@ -82,6 +89,7 @@ public class SecurityConfig {
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers("/auth/**"));
+                /*.csrf(AbstractHttpConfigurer::disable);*/
 
         return http.build();
     }

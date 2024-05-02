@@ -6,6 +6,8 @@ import com.zeco.zecomedical.auth.AuthDtos.SigninRequestDto;
 import com.zeco.zecomedical.auth.AuthDtos.SignoutResponseDto;
 import com.zeco.zecomedical.auth.AuthDtos.SignupResponseDto;
 import com.zeco.zecomedical.auth.service.AuthenticationService;
+import com.zeco.zecomedical.auth.verifyEmail.VerifyEmailService;
+import com.zeco.zecomedical.dto.RequestResponse;
 import com.zeco.zecomedical.dto.UsersRequestDto;
 import com.zeco.zecomedical.dto.UsersResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 
 @RestController
@@ -26,6 +30,13 @@ import java.net.URI;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+    private  final VerifyEmailService verifyEmailService;
+
+    @GetMapping("/confirm-email") ///confirm-email?token=....
+    public ResponseEntity<RequestResponse> confirmEmail(@RequestParam(name = "token") UUID token){
+
+        return ResponseEntity.ok(verifyEmailService.validateEmailToken(( token)));
+    }
 
     @GetMapping("/session")
     public UsersResponseDto checkUserSession(HttpServletRequest request){
@@ -39,7 +50,7 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@RequestBody UsersRequestDto signupData){
+    public ResponseEntity<SignupResponseDto> signup(@RequestBody UsersRequestDto signupData)  {
         return ResponseEntity.ok(authenticationService.signup(signupData));
     }
 
