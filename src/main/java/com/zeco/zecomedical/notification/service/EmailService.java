@@ -1,21 +1,25 @@
 package com.zeco.zecomedical.notification.service;
 
 import jakarta.mail.Message;
- import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
  import jakarta.mail.internet.MimeMessage;
  import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
  import org.springframework.mail.MailException;
  import org.springframework.mail.javamail.JavaMailSender;
- import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
  import org.springframework.retry.annotation.Backoff;
  import org.springframework.retry.annotation.Retryable;
  import org.springframework.scheduling.annotation.Async;
  import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 
- import java.time.LocalDate;
+import java.time.LocalDate;
  import java.util.UUID;
  import java.util.concurrent.CompletableFuture;
 
@@ -25,28 +29,35 @@ import lombok.extern.log4j.Log4j2;
  public class EmailService {
 
      private final JavaMailSender javaMailSender;
-     //private final TemplateEngine templateEngine;
+     private final TemplateEngine templateEngine;
 
      @Async
      @Retryable(maxAttempts = 5, backoff = @Backoff(delay = 30000, multiplier = 2))//30000 milliseconds = 30 seconds
-     public CompletableFuture<Void> verifyEmailAddress(UUID token, String email){
+     public CompletableFuture<Void> verifyEmailAddress(UUID token, String email)  {
 
          return  CompletableFuture.runAsync( () -> {
-                 MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
-                 @Override
-                 public void prepare(MimeMessage mimeMessage) throws Exception {
+             try{
 
-                 mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
-                 mimeMessage.setFrom("nkemahjunior679205967@gmail.com");
-                 mimeMessage.setSubject("Confirm your signup to zecomedical");
-                 mimeMessage.setText("This link will expire in 5 hours ,follow this  to confirm your email : http://localhost:8080/auth/confirm-email?token="+token);
+                 MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+                 MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
-                 }};
+                 mimeMessageHelper.setFrom("nkemahjunior679205967@gmail.com");
+                 mimeMessageHelper.setTo(email);
+                 mimeMessageHelper.setSubject("Confirm your signup to zecomedical");
 
+                 Context context = new Context();
 
+                 context.setVariable("verificationUrl",  "http://localhost:8080/email/confirm-email?token="+token);
+                 String processedString = templateEngine.process("emailVerification", context);
 
-                 javaMailSender.send(preparator);
+                 mimeMessageHelper.setText(processedString, true);
+                 javaMailSender.send(mimeMessage);
+
+             }catch(Exception e){
+                 log.error("error sending verification mail :::" + e.getMessage());
+             }
+
 
              }).exceptionally( (error) -> {
                 log.error("error sending verification mail :::" + error.getMessage());
@@ -92,6 +103,21 @@ import lombok.extern.log4j.Log4j2;
 
 
 
+ /*MimeMessagePreparator preparator = new MimeMessagePreparator() {
+
+ @Override
+ public void prepare(MimeMessage mimeMessage) throws Exception {
+
+ mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+ mimeMessage.setFrom("nkemahjunior679205967@gmail.com");
+ mimeMessage.setSubject("Confirm your signup to zecomedical");
+ mimeMessage.setText("This link will expire in 5 hours ,follow this  to confirm your email : http://localhost:8080/auth/confirm-email?token="+token);
+
+ }};*/
+
+
+
+//javaMailSender.send(preparator);
 
 
 /**

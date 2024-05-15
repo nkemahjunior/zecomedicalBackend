@@ -30,13 +30,15 @@ import java.util.concurrent.ExecutionException;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
-    private  final VerifyEmailService verifyEmailService;
 
-    @GetMapping("/confirm-email") ///confirm-email?token=....
+    //this functionality has been moved to the notification service
+    /*@GetMapping("/confirm-email") ///confirm-email?token=....
     public ResponseEntity<RequestResponse> confirmEmail(@RequestParam(name = "token") UUID token){
 
         return ResponseEntity.ok(verifyEmailService.validateEmailToken(( token)));
-    }
+    }*/
+
+
 
     @GetMapping("/session")
     public UsersResponseDto checkUserSession(HttpServletRequest request){

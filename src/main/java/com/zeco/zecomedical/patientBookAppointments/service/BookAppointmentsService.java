@@ -91,7 +91,7 @@ public class BookAppointmentsService {
                 .status("PENDING")
                 .reason(data.getReason())
                 .complain_notes(data.getComplain_notes())
-                .rende_vouz(data.getRende_vouz())
+                //.rende_vouz(data.getRende_vouz()) why are you asking if its a rende-vouz when u can get that info from the reason
                 .doctorID(doc.get())
                 .patientID(patient.get())
                 .appointment_id(appointment.get())

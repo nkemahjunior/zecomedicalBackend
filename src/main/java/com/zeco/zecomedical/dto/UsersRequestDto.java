@@ -17,7 +17,7 @@ public class UsersRequestDto {
     private String address;
     private String email;
     private String password;
-    private Roles role;
+    //private Roles role;
     private Boolean isAuthenticated;
 
 }

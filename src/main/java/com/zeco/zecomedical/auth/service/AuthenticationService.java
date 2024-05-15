@@ -6,6 +6,7 @@ import com.zeco.zecomedical.auth.AuthDtos.SignupResponseDto;
 import com.zeco.zecomedical.auth.verifyEmail.VerifyEmailService;
 import com.zeco.zecomedical.dto.UsersRequestDto;
 import com.zeco.zecomedical.dto.UsersResponseDto;
+import com.zeco.zecomedical.model.Roles;
 import com.zeco.zecomedical.model.Users;
 import com.zeco.zecomedical.general.repositories.UsersRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,6 +66,9 @@ public class AuthenticationService {
         Calendar calendar = Calendar.getInstance();
         calendar.set(signupData.getYear(),signupData.getMonth(),signupData.getDay());
 
+        Roles unverified = new Roles();
+        unverified.setId(4);
+
         Users user = Users.builder()
                 .name(signupData.getName())
                 .username(signupData.getUsername())
@@ -73,8 +77,8 @@ public class AuthenticationService {
                 .address(signupData.getAddress())
                 .email(signupData.getEmail())
                 .password(passwordEncoder.encode(signupData.getPassword()))
-                .role(signupData.getRole())
-                .isAuthenticated(false) // user has is logged out
+                .role(unverified)
+                .isAuthenticated(false) // user  is logged out
                 .verified(false) // email is not verified
                 .build();
 

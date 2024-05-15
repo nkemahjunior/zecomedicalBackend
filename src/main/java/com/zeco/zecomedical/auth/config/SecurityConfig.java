@@ -78,18 +78,18 @@ public class SecurityConfig {
         http
                 //.sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) this is Default
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/auth/**").permitAll()
+                .authorizeHttpRequests((authorize) -> authorize  //static for css files
+                        .requestMatchers("/auth/**","/email/**","/testEmail","/static/**").permitAll()
                         .anyRequest().authenticated()
 
                 ).csrf((csrf) -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
                 )
-                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                /*.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers("/auth/**"));
-                /*.csrf(AbstractHttpConfigurer::disable);*/
+                        .ignoringRequestMatchers("/auth/**"));*/
+                .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
