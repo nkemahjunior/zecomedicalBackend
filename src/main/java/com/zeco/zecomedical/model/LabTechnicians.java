@@ -2,11 +2,14 @@ package com.zeco.zecomedical.model;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "lab_technicians")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class LabTechnicians {
 
     @Id
@@ -15,6 +18,7 @@ public class LabTechnicians {
 
     @OneToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @NonNull
     private Users userID;
 
     @OneToOne

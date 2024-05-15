@@ -27,6 +27,7 @@ public class FindingUsers {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
+
         if(username == null) throw new MyException(HttpStatus.NOT_FOUND.value(),"user not found,login");
 
         Optional<Users> userOptional = usersRepository.findByUsername(username);

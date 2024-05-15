@@ -2,11 +2,7 @@ package com.zeco.zecomedical.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
+import lombok.*;
 
 @Entity
 @Table(name = "registered_patients")
@@ -19,7 +15,7 @@ public class RegisteredPatients {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @NonNull
+    //@NonNull
     private Long id;
 
 //can the doctor edit this terms for the patient?
@@ -35,6 +31,7 @@ public class RegisteredPatients {
 
     @OneToOne
     @JoinColumn(name = "patients_id", referencedColumnName = "id")
+    @NonNull
     private Users patientID;
 
     @Column(name = "email")

@@ -5,6 +5,10 @@ import com.zeco.zecomedical.auth.AuthDtos.LogoutRequest;
 import com.zeco.zecomedical.auth.AuthDtos.SigninRequestDto;
 import com.zeco.zecomedical.auth.AuthDtos.SignoutResponseDto;
 import com.zeco.zecomedical.auth.AuthDtos.SignupResponseDto;
+import com.zeco.zecomedical.auth.activateAccounts.ActivateAccountsService;
+import com.zeco.zecomedical.auth.activateAccounts.activationDtos.ActivateDoctorAccountRequest;
+import com.zeco.zecomedical.auth.activateAccounts.activationDtos.ActivateLabTechAccountRequest;
+import com.zeco.zecomedical.auth.activateAccounts.activationDtos.ActivatePatientAccountRequest;
 import com.zeco.zecomedical.auth.service.AuthenticationService;
 import com.zeco.zecomedical.auth.verifyEmail.VerifyEmailService;
 import com.zeco.zecomedical.dto.RequestResponse;
@@ -36,6 +40,7 @@ public class AuthController {
 
     private final AuthenticationService authenticationService;
     public  final  VerifyEmailService verifyEmailService;
+    private  final ActivateAccountsService activateAccountsService;
 
     //this functionality has been moved to the notification service
     /*@GetMapping("/confirm-email") ///confirm-email?token=....
@@ -75,5 +80,20 @@ public class AuthController {
     @PostMapping("/signout")
     public ResponseEntity<SignoutResponseDto> signout(Authentication authentication, HttpServletRequest request, HttpServletResponse response){
         return ResponseEntity.ok(authenticationService.signout(authentication, request, response));
+    }
+
+    @PostMapping("/activatePatientAccount")
+    public ResponseEntity<RequestResponse> activatePatientAccountEndpoinr(@RequestBody ActivatePatientAccountRequest request){
+        return  ResponseEntity.ok(activateAccountsService.activatePatientAccount(request));
+    }
+
+    @PostMapping("/activateDoctorAccount")
+    public ResponseEntity<RequestResponse> activateDoctorAccountEndpoint(@RequestBody ActivateDoctorAccountRequest request){
+        return  ResponseEntity.ok(activateAccountsService.activateDoctorAccount(request));
+    }
+
+    @PostMapping("/activateLabTechnicianAccount")
+    public ResponseEntity<RequestResponse> activateLabTechnicianAccountEndpoint(@RequestBody ActivateLabTechAccountRequest request){
+        return ResponseEntity.ok(activateAccountsService.activateLabTechnicianAccount(request));
     }
 }
