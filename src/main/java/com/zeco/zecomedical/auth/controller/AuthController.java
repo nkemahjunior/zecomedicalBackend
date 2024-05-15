@@ -10,10 +10,13 @@ import com.zeco.zecomedical.auth.verifyEmail.VerifyEmailService;
 import com.zeco.zecomedical.dto.RequestResponse;
 import com.zeco.zecomedical.dto.UsersRequestDto;
 import com.zeco.zecomedical.dto.UsersResponseDto;
+import com.zeco.zecomedical.general.utils.MyDebug;
 import jakarta.servlet.http.HttpServletRequest;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,10 +29,13 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/auth/")
+@Log4j2
 @RequiredArgsConstructor
+
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+    public  final  VerifyEmailService verifyEmailService;
 
     //this functionality has been moved to the notification service
     /*@GetMapping("/confirm-email") ///confirm-email?token=....
@@ -37,6 +43,11 @@ public class AuthController {
 
         return ResponseEntity.ok(verifyEmailService.validateEmailToken(( token)));
     }*/
+
+    @GetMapping("/resendVerificationEmail") ///resendVerificationEmail?email=....
+    public ResponseEntity<RequestResponse> resendVerificationEmailEndpoint(@RequestParam(name = "email") String email){
+        return ResponseEntity.ok(verifyEmailService.resendVerificationEmail(email));
+    }
 
 
 

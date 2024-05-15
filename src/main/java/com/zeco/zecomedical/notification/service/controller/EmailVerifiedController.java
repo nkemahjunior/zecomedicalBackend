@@ -27,4 +27,6 @@ public class EmailVerifiedController {
         model.addAttribute("setUpAccountUrl","http://localhost:3000/");
         return  "confirmedEmail.html";
     }
+
+
 }

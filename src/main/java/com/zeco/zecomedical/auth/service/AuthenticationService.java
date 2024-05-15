@@ -67,7 +67,7 @@ public class AuthenticationService {
         calendar.set(signupData.getYear(),signupData.getMonth(),signupData.getDay());
 
         Roles unverified = new Roles();
-        unverified.setId(4);
+        unverified.setId(4);// id for unverified role
 
         Users user = Users.builder()
                 .name(signupData.getName())

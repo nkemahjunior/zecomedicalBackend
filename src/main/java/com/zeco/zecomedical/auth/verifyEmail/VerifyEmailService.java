@@ -6,11 +6,13 @@ import com.zeco.zecomedical.dto.RequestResponse;
 import com.zeco.zecomedical.general.repositories.UserRolesRepository;
 import com.zeco.zecomedical.general.repositories.UsersRepository;
 import com.zeco.zecomedical.general.repositories.VerificationTokenRepository;
+import com.zeco.zecomedical.general.utils.MyDebug;
 import com.zeco.zecomedical.model.Roles;
 import com.zeco.zecomedical.model.Users;
 import com.zeco.zecomedical.model.VerificationToken;
 import com.zeco.zecomedical.notification.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class VerifyEmailService {
 
     private final VerificationTokenRepository tokenRepository;
@@ -80,4 +83,41 @@ public class VerifyEmailService {
                         .build();
 
     }
+
+
+
+    public RequestResponse resendVerificationEmail(String email){
+
+       Optional<Users> user =  usersRepository.findByEmail(email);
+
+
+       if(user.isEmpty()) {
+           return RequestResponse.builder()
+                   .status(HttpStatus.NOT_FOUND.value())
+                   .message("email not found")
+                   .build();
+       }
+
+       //4 is the role of unverified users
+       if(user.get().getRole().getRoles().equals("UNVERIFIED")){
+
+           saveAndSendEmailVerificationToken(user.get());
+
+           return RequestResponse.builder()
+                   .status(HttpStatus.OK.value())
+                   .message("email sent, proceed and verify email")
+                   .build();
+
+       }
+
+
+
+
+        return RequestResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message("error happened")
+                .build();
+
+    }
 }
+
