@@ -1,8 +1,8 @@
-package com.zeco.zecomedical.auth.activateAccounts;
+package com.zeco.zecomedical.activateAccounts;
 
-import com.zeco.zecomedical.auth.activateAccounts.activationDtos.ActivateDoctorAccountRequest;
-import com.zeco.zecomedical.auth.activateAccounts.activationDtos.ActivateLabTechAccountRequest;
-import com.zeco.zecomedical.auth.activateAccounts.activationDtos.ActivatePatientAccountRequest;
+import com.zeco.zecomedical.activateAccounts.activationDtos.ActivateLabTechAccountRequest;
+import com.zeco.zecomedical.activateAccounts.activationDtos.ActivateDoctorAccountRequest;
+import com.zeco.zecomedical.activateAccounts.activationDtos.ActivatePatientAccountRequest;
 import com.zeco.zecomedical.dto.RequestResponse;
 import com.zeco.zecomedical.general.repositories.DoctorsRepository;
 import com.zeco.zecomedical.general.repositories.LabTechnicianRepository;
@@ -23,12 +23,22 @@ public class ActivateAccountsService {
     private final DoctorsRepository doctorsRepository;
     private  final LabTechnicianRepository labTechnicianRepository;
 
+
     private final UsersRepository usersRepository;
 
 
     public RequestResponse activatePatientAccount(ActivatePatientAccountRequest request){
 
        Users user = findingUsers.findUserByTheUsername("user not found");
+
+       if(patientRepository.existsByPatientID(user)) {
+          return RequestResponse.builder()
+                   .status(HttpStatus.CONFLICT.value())
+                   .message("patient account already exists")
+                   .build();
+
+       }
+
 
         RegisteredPatients patient = RegisteredPatients.builder()
                 .weight(request.getWeight())
@@ -39,7 +49,7 @@ public class ActivateAccountsService {
 
         patientRepository.save(patient);
 
-        //change user role to patient
+        //update user role to patient
         Roles patientRole = new Roles();
         patientRole.setId(3);// role id for patients
         user.setRole(patientRole);
@@ -48,7 +58,7 @@ public class ActivateAccountsService {
 
         return RequestResponse.builder()
                 .status(HttpStatus.CREATED.value())
-                .message("patient account activated")
+                .message("patient account created")
                 .build();
     }
 
@@ -57,6 +67,13 @@ public class ActivateAccountsService {
     public RequestResponse activateDoctorAccount(ActivateDoctorAccountRequest request){
 
         Users user = findingUsers.findUserByTheUsername("user not found");
+
+        if(doctorsRepository.existsByUuid(user)){
+            return RequestResponse.builder()
+                    .status(HttpStatus.CONFLICT.value())
+                    .message("doctor account already exists")
+                    .build();
+        }
 
         Doctors doctor = Doctors.builder()
                 .uuid(user)
@@ -74,14 +91,23 @@ public class ActivateAccountsService {
 
         return RequestResponse.builder()
                 .status(HttpStatus.CREATED.value())
-                .message("Doctor account activated")
+                .message("Doctor account created")
                 .build();
     }
+
+
 
 
     public RequestResponse activateLabTechnicianAccount(ActivateLabTechAccountRequest request){
 
         Users user = findingUsers.findUserByTheUsername("user not found");
+
+        if(labTechnicianRepository.existsByUserID(user)){
+            return RequestResponse.builder()
+                    .status(HttpStatus.CONFLICT.value())
+                    .message("lab technician account already exists")
+                    .build();
+        }
 
         Laboratories labDepartment = new Laboratories();
         labDepartment.setId(request.getLabDepartment());
@@ -102,7 +128,7 @@ public class ActivateAccountsService {
 
         return RequestResponse.builder()
                 .status(HttpStatus.CREATED.value())
-                .message("Lab Technician account activated")
+                .message("Lab Technician account created")
                 .build();
     }
 }

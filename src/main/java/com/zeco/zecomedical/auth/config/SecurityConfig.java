@@ -86,10 +86,10 @@ public class SecurityConfig {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
                 )
-                /*.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers("/auth/**"));*/
-                .csrf(AbstractHttpConfigurer::disable);
+                        .ignoringRequestMatchers("/auth/**"));
+                 /*..csrf(AbstractHttpConfigurer::disable);*/
 
         return http.build();
     }

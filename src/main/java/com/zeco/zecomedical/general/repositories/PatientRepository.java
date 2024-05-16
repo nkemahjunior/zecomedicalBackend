@@ -11,6 +11,8 @@ public interface PatientRepository extends JpaRepository<RegisteredPatients,Long
 
    Optional<RegisteredPatients> findByPatientID(Users user);
 
+   Boolean existsByPatientID(Users user);
+
 
 
 }

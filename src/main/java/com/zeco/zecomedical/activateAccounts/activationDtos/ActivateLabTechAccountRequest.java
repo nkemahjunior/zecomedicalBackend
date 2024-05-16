@@ -1,4 +1,4 @@
-package com.zeco.zecomedical.auth.activateAccounts.activationDtos;
+package com.zeco.zecomedical.activateAccounts.activationDtos;
 
 import com.zeco.zecomedical.model.Laboratories;
 import com.zeco.zecomedical.model.Users;
@@ -10,6 +10,6 @@ public class ActivateLabTechAccountRequest {
 
 
     //private Long id;
-    private Users userID;
+    //private Users userID;
     private Long labDepartment;
 }

@@ -53,13 +53,13 @@ public class AuthenticationService {
     public SignupResponseDto signup(UsersRequestDto signupData)  {
 
         if(usersRepository.findByEmail(signupData.getEmail()).isPresent()){
-            return new SignupResponseDto(HttpStatus.CONFLICT.value(), "email already exist");
+            return new SignupResponseDto(HttpStatus.CONFLICT.value(), "email already exist",null);
         }
 
 
         if(usersRepository.findByUsername(signupData.getUsername()).isPresent() ){
 
-            return new SignupResponseDto(HttpStatus.CONFLICT.value(), "username already exist");
+            return new SignupResponseDto(HttpStatus.CONFLICT.value(), "username already exist",null);
         }
 
 
@@ -89,7 +89,7 @@ public class AuthenticationService {
         //have the option to verify their email
         verifyEmailService.saveAndSendEmailVerificationToken(savedUser);
 
-        return new SignupResponseDto(HttpStatus.CREATED.value(), "Account created successfully, proceed and verify your email");
+        return new SignupResponseDto(HttpStatus.CREATED.value(), "Account created successfully, proceed and verify your email", savedUser.getEmail());
 
     }
 
@@ -118,6 +118,8 @@ public class AuthenticationService {
              return checkSession(request);
 
              //i am handling the BadCredentials exception in the controllerAdvice class encase  authenticationManager.authenticate throws it due to wrong login details
+
+        //so if there is a Bad credentials error, this method will return 401 and  our custom error message( check controller advice to see it)
 
     }
 
@@ -170,7 +172,7 @@ public class AuthenticationService {
                     .address(user.getAddress())
                     .email(user.getEmail())
                     .role(user.getRole())
-                    .isAuthenticated(true) //user is login
+                    .isAuthenticated(user.getIsAuthenticated()) //user is login
                     .verified(user.getVerified())
 
                     .build();

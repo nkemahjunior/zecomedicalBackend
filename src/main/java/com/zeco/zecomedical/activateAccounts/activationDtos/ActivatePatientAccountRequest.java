@@ -1,4 +1,4 @@
-package com.zeco.zecomedical.auth.activateAccounts.activationDtos;
+package com.zeco.zecomedical.activateAccounts.activationDtos;
 
 import com.zeco.zecomedical.model.Users;
 import lombok.Data;
@@ -11,6 +11,6 @@ public class ActivatePatientAccountRequest {
     private Float weight;
     private String bloodGroup;
     private String bloodPressure;
-    private Users patientID;
+   // private Users patientID;
     //private String email;
 }
