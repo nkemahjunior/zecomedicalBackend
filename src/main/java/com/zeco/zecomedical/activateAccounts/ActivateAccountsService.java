@@ -39,6 +39,20 @@ public class ActivateAccountsService {
 
        }
 
+        if(doctorsRepository.existsByUuid(user)){
+            return RequestResponse.builder()
+                    .status(HttpStatus.CONFLICT.value())
+                    .message("doctor account already exists ")
+                    .build();
+        }
+
+        if(labTechnicianRepository.existsByUserID(user)){
+            return RequestResponse.builder()
+                    .status(HttpStatus.CONFLICT.value())
+                    .message("lab technician account already exists")
+                    .build();
+        }
+
 
         RegisteredPatients patient = RegisteredPatients.builder()
                 .weight(request.getWeight())
@@ -75,6 +89,21 @@ public class ActivateAccountsService {
                     .build();
         }
 
+        if(patientRepository.existsByPatientID(user)) {
+            return RequestResponse.builder()
+                    .status(HttpStatus.CONFLICT.value())
+                    .message("patient account already exists")
+                    .build();
+
+        }
+
+        if(labTechnicianRepository.existsByUserID(user)){
+            return RequestResponse.builder()
+                    .status(HttpStatus.CONFLICT.value())
+                    .message("lab technician account already exists")
+                    .build();
+        }
+
         Doctors doctor = Doctors.builder()
                 .uuid(user)
                 .speciality(request.getSpeciality())
@@ -108,6 +137,22 @@ public class ActivateAccountsService {
                     .message("lab technician account already exists")
                     .build();
         }
+
+        if(patientRepository.existsByPatientID(user)) {
+            return RequestResponse.builder()
+                    .status(HttpStatus.CONFLICT.value())
+                    .message("patient account already exists")
+                    .build();
+
+        }
+
+        if(doctorsRepository.existsByUuid(user)){
+            return RequestResponse.builder()
+                    .status(HttpStatus.CONFLICT.value())
+                    .message("doctor account already exists")
+                    .build();
+        }
+
 
         Laboratories labDepartment = new Laboratories();
         labDepartment.setId(request.getLabDepartment());
