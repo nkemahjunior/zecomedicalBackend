@@ -1,4 +1,4 @@
-package com.zeco.zecomedical.activateAccounts;
+package com.zeco.zecomedical.activateAccounts.service;
 
 import com.zeco.zecomedical.activateAccounts.activationDtos.ActivateLabTechAccountRequest;
 import com.zeco.zecomedical.activateAccounts.activationDtos.ActivateDoctorAccountRequest;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class ActivateAccountsService {
+
 
     private final FindingUsers findingUsers;
     private final PatientRepository patientRepository;

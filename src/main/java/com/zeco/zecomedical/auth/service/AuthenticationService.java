@@ -94,6 +94,9 @@ public class AuthenticationService {
     }
 
 
+
+
+
     public UsersResponseDto signin(SigninRequestDto signinData, HttpServletRequest request, HttpServletResponse response) {
 
 
@@ -124,6 +127,9 @@ public class AuthenticationService {
     }
 
 
+
+
+
     public SignoutResponseDto signout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
 
 
@@ -145,6 +151,9 @@ public class AuthenticationService {
 
 
     }
+
+
+
 
 
     public UsersResponseDto checkSession(HttpServletRequest request){
@@ -174,7 +183,7 @@ public class AuthenticationService {
                     .role(user.getRole())
                     .isAuthenticated(user.getIsAuthenticated()) //user is login
                     .verified(user.getVerified())
-
+                    .profilePhotoUrl(user.getProfilePhotoUrl())
                     .build();
 
 

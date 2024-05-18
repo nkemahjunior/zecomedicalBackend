@@ -1,7 +1,7 @@
 package com.zeco.zecomedical.activateAccounts.controller;
 
 
-import com.zeco.zecomedical.activateAccounts.ActivateAccountsService;
+import com.zeco.zecomedical.activateAccounts.service.ActivateAccountsService;
 import com.zeco.zecomedical.activateAccounts.activationDtos.ActivateDoctorAccountRequest;
 import com.zeco.zecomedical.activateAccounts.activationDtos.ActivateLabTechAccountRequest;
 import com.zeco.zecomedical.activateAccounts.activationDtos.ActivatePatientAccountRequest;

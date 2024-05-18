@@ -41,5 +41,7 @@ public class UsersResponseDto {
 
         private  Boolean verified;
 
+        private String profilePhotoUrl;
+
 
     }

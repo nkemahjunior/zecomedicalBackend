@@ -71,4 +71,7 @@ public class Users implements Serializable { //implementing Serializable so Spri
     @Column(name = "verified")
     private Boolean verified;
 
+    @Column(name = "profile_photo_url")
+    private String profilePhotoUrl;
+
 }

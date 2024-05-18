@@ -59,10 +59,10 @@ public class SecurityConfig {
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
                 HttpHeaders.ACCEPT));
-        configuration.setMaxAge(3600L);
+        configuration.setMaxAge(3600L); //age for cors preflight
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration); //cors check on all url paths
 
         return source;
     }
@@ -89,7 +89,7 @@ public class SecurityConfig {
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers("/auth/**"));
-                 /*..csrf(AbstractHttpConfigurer::disable);*/
+                 /*.csrf(AbstractHttpConfigurer::disable);*/
 
         return http.build();
     }
@@ -98,6 +98,8 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
 
 
