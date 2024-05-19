@@ -23,7 +23,7 @@ public class DoctorsPostAppointmentController {
 
 
     @PostMapping("/appointment")
-    public ResponseEntity<RequestResponse> postAppointmentEndpoint(@RequestBody DoctorsAvailableForAppointmentRequest data, HttpServletRequest req){
+    public ResponseEntity<RequestResponse> postAppointmentEndpoint(@RequestBody List<DoctorsAvailableForAppointmentRequest> data, HttpServletRequest req){
 
         return ResponseEntity.ok(postAppointmentService.PostAppointmentAsDoctor(req,data));
     }
