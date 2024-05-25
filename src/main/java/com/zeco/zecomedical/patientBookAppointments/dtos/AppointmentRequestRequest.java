@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AppointmentRequestRequest {
 
-    private String status;
+    //private String status;
 
     private String reason;
 
     private  String complain_notes;
 
-    private  Boolean rende_vouz;
+    //private  Boolean rende_vouz;
 
     private Long  doctor_id;
 
-    private Long patient_id;
+    //private Long patient_id;
 
     private Long appointment_id;
 

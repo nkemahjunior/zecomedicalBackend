@@ -1,5 +1,6 @@
 package com.zeco.zecomedical.doctorsPostAppointment.dtos;
 
+import com.zeco.zecomedical.general.projections.doctors.appointmentRequest.PatientsTable;
 import com.zeco.zecomedical.model.Doctors;
 import com.zeco.zecomedical.model.DoctorsAvailableForAppointment;
 import com.zeco.zecomedical.model.RegisteredPatients;
@@ -16,7 +17,7 @@ public class MyAppointmentsResponse {
 
    // private String day;
 
-    //private LocalDateTime time_from;
+    private LocalDateTime time_from;
 
   //  private LocalDateTime time_to;
 
@@ -26,13 +27,13 @@ public class MyAppointmentsResponse {
 
     private  String complain_notes;
 
-    private  Boolean rende_vouz;
+    //private  Boolean rende_vouz;
 
-    private Doctors doctorID;
+   // private Doctors doctorID;
 
-    private RegisteredPatients patient_id;
+    private PatientsTable patient_id;
 
-    private DoctorsAvailableForAppointment appointment_id;
+   // private DoctorsAvailableForAppointment appointment_id;
 
     private LocalDateTime dateTime;
 

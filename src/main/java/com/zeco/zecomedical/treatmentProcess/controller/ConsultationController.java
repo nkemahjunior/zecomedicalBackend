@@ -20,6 +20,7 @@ public class ConsultationController {
 
     @PostMapping("/start/{patientID}")
     public ResponseEntity<RequestResponse> startConsultationEndpoint(@PathVariable Long patientID){
+
         return ResponseEntity.ok(consultationService.startConsultation(patientID));
     }
 

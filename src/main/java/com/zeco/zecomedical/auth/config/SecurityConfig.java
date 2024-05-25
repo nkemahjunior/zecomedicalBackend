@@ -48,7 +48,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);  http://localhost:5173
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://127.0.0.1:5500"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST","DELETE","PUT"));
         configuration.setAllowedHeaders(Arrays.asList(
 
@@ -80,7 +80,7 @@ public class SecurityConfig {
                 //.sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) this is Default
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize  //static for css files
-                        .requestMatchers("/auth/**","/email/**","/testEmail","/static/**").permitAll()
+                        .requestMatchers("/auth/**","/email/**","/testEmail","/static/**" ).permitAll()
                         .anyRequest().authenticated()
 
                 )/*.csrf((csrf) -> csrf

@@ -47,11 +47,11 @@ public class AppointmentRequests {
     
     @Column(name = "complain_notes")
     @NonNull
-    private  String complain_notes;
+    private  String complainNotes;
     
-    @Column(name  = "rende_vouz")
+    /*@Column(name  = "rende_vouz")
     @NonNull
-    private  Boolean rende_vouz;
+    private  Boolean rende_vouz;*/
 
     @ManyToOne
     @JoinColumn(name = "doctor_id",referencedColumnName = "doctor_id")

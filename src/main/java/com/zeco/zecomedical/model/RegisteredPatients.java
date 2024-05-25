@@ -31,7 +31,7 @@ public class RegisteredPatients {
 
     @OneToOne
     @JoinColumn(name = "patients_id", referencedColumnName = "id")
-    @NonNull
+    //@NonNull
     private Users patientID;
 
     @Column(name = "email")

@@ -2,6 +2,7 @@ package com.zeco.zecomedical.patientBookAppointments.controller;
 
 
 import com.zeco.zecomedical.doctorsPostAppointment.dtos.MyAppointmentsResponse;
+import com.zeco.zecomedical.general.projections.patient.doctorsAvailable.DoctorsAvailableProjection;
 import com.zeco.zecomedical.patientBookAppointments.dtos.AppointmentRequestRequest;
 import com.zeco.zecomedical.patientBookAppointments.service.AppointmentsHistory;
 import com.zeco.zecomedical.patientBookAppointments.service.BookAppointmentsService;
@@ -39,7 +40,7 @@ public class BookAppointmentController {
  * A Page<T> instance, in addition to having the list of DoctorsAvailableForAppointment, also knows about the total number of available pages. It triggers an additional count query to achieve it. To avoid such an overhead cost, we can instead return a Slice<T> or a List<T>.
  * ***/
     @GetMapping("/available_doctors")
-    public ResponseEntity< Page<DoctorsAvailableForAppointment>> getAllDoctorsAvailableForAppointment(@RequestParam(name="page", required = true) Integer page, @RequestParam(name = "size",required = true) Integer size){
+    public ResponseEntity< Page<DoctorsAvailableProjection>> getAllDoctorsAvailableForAppointment(@RequestParam(name="page", required = true) Integer page, @RequestParam(name = "size",required = true) Integer size){
 
         //http://localhost:8080/patient/available_doctors?page=0&size=2
         //return ResponseEntity.ok( doctorsAvailableRepository.findAll(PageRequest.of(page,size)));

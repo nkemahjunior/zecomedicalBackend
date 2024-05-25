@@ -8,6 +8,7 @@ import com.zeco.zecomedical.doctorsPostAppointment.service.PostAppointmentServic
 import com.zeco.zecomedical.dto.RequestResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,18 +31,18 @@ public class DoctorsPostAppointmentController {
 
 
 
-    @GetMapping("/appointments")
-    public ResponseEntity<List<MyAppointmentsResponse>> getAllMyAppointments(){
+    @GetMapping("/appointments") ///appointments?page=0&size=2
+    public ResponseEntity<Page<MyAppointmentsResponse>> getAllMyAppointments(@RequestParam(name = "page")Integer page, @RequestParam("size") Integer size ){
 
-        return ResponseEntity.ok(getAndChangeAppointmentDetailsService.getUpcomingAppointmentRequestsForADoctor());
+        return ResponseEntity.ok(getAndChangeAppointmentDetailsService.getUpcomingAppointmentRequestsForADoctor(page,size));
     }
 
 
 
-    @GetMapping("/appointments/accepted")
-    public ResponseEntity<List<MyAppointmentsResponse>> getAcceptedUpcomingAppointments(){
+    @GetMapping("/appointments/accepted")///accepted?page=0&size=2
+    public ResponseEntity<Page<MyAppointmentsResponse>> getAcceptedUpcomingAppointments(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
 
-        return ResponseEntity.ok(getAndChangeAppointmentDetailsService.getAcceptedUpcomingAppointments());
+        return ResponseEntity.ok(getAndChangeAppointmentDetailsService.getAcceptedUpcomingAppointments(page,size));
     }
 
 

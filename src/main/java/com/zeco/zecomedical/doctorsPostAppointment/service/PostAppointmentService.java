@@ -66,11 +66,15 @@ public class PostAppointmentService {
             if (time_from.isAfter(time_to))
                 throw new MyException(HttpStatus.BAD_REQUEST.value(), "start time should be lesser than end time");
 
+            if(doctorsAvailableRepository.existsByDoctorIDAndTimeFrom(doctor1, time_from)){
+                throw new MyException(HttpStatus.CONFLICT.value(), "you already have an appointment created at that date and time (" + time_from +")");
+            }
+
             DoctorsAvailableForAppointment available = DoctorsAvailableForAppointment.builder()
                     .doctorID(doctor1)
                     //.day(el.getDay()) the day is literally in the timestamp you motherfucker
                     .timeFrom(time_from)
-                    .time_to(time_to)
+                    .timeTo(time_to)
                     .build();
 
             doctorsAvailableRepository.save(available);
@@ -83,18 +87,6 @@ public class PostAppointmentService {
                 .status(HttpStatus.CREATED.value())
                 .message("appointment created")
                 .build();
-
-
-
-
-        //LocalDateTime time_from = LocalDateTime.of(data.getStartYear(),data.getStartMonth(),data.getStartDayNumber(), data.getTime_from_hour(), data.getTime_from_min());
-        //LocalDateTime time_to = LocalDateTime.of(data.getEndYear(),data.getEndMonth(),data.getEndDayNumber(),data.getTime_to_hour(), data.getTime_to_min());
-
-        /*if(time_from.isBefore(LocalDateTime.now()) || time_to.isBefore(LocalDateTime.now()))
-            throw new MyException(HttpStatus.BAD_REQUEST.value(), "time for appointment should be from today and above");
-
-        if (time_from.isAfter(time_to))
-            throw new MyException(HttpStatus.BAD_REQUEST.value(), "start time should be lesser than end time");*/
 
 
     }

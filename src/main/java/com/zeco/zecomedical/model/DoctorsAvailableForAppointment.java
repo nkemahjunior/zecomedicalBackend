@@ -38,9 +38,9 @@ public class DoctorsAvailableForAppointment {
     @NonNull
     private UUID uuid;*/
 
-    @Column(name = "day")
+   /* @Column(name = "day")
     @NonNull
-    private String day;
+    private String day;*/
 
     @Column(name = "time_from")
     @NonNull
@@ -48,7 +48,7 @@ public class DoctorsAvailableForAppointment {
 
     @Column(name = "time_to")
     @NonNull
-    private LocalDateTime time_to;//the method i want to use is found in Builder which is a static class in Calender
+    private LocalDateTime timeTo;//the method i want to use is found in Builder which is a static class in Calender
 
     /*@Column(name = "name")
     //@NonNull

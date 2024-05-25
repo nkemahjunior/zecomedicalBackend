@@ -59,7 +59,7 @@ public class ConsultationService {
 
         return  RequestResponse.builder()
                 .status(HttpStatus.CREATED.value())
-                .message("saved")
+                .message("Starting consultation")
                 .build();
     }
 
@@ -243,6 +243,7 @@ public class ConsultationService {
         if(consultationOptional.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"start a consultation session first");
 
 
+        //returning an arrray of objects
         Object[] array = {doctor,patient.get(),consultationOptional.get()};
 
         return array;
@@ -295,8 +296,8 @@ public class ConsultationService {
         AppointmentRequests appointment = AppointmentRequests.builder()
                 .status("PENDING")
                 .reason("CHECK_UP")
-                .complain_notes("coming for follow up")
-                .rende_vouz(true)
+                .complainNotes("coming for follow up")
+                //.rende_vouz(true) checkup and rende vouz is thesame thing
                 .doctorID(doctor_id)
                 .patientID(patient_id)
                 .dateTime(LocalDateTime.of(data.getCheckupYear(),data.getCheckupMonth(), data.getCheckupDay(), data.getCheckupHour(), data.getCheckupMin()))
