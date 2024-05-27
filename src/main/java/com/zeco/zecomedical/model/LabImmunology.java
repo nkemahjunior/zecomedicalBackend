@@ -56,6 +56,10 @@ public class LabImmunology {
     @Column(name = "creation_timestamp")
     private LocalDateTime creationTimestamp;
 
+    @Column(name =  "notes")
+    private String notes;
+
+
 
 
 }

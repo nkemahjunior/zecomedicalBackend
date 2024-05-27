@@ -2,9 +2,11 @@ package com.zeco.zecomedical.general.utils;
 
 import com.zeco.zecomedical.customExceptions.MyException;
 import com.zeco.zecomedical.general.repositories.DoctorsRepository;
+import com.zeco.zecomedical.general.repositories.LabTechnicianRepository;
 import com.zeco.zecomedical.general.repositories.PatientRepository;
 import com.zeco.zecomedical.general.repositories.UsersRepository;
 import com.zeco.zecomedical.model.Doctors;
+import com.zeco.zecomedical.model.LabTechnicians;
 import com.zeco.zecomedical.model.RegisteredPatients;
 import com.zeco.zecomedical.model.Users;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class FindingUsers {
     private final UsersRepository usersRepository;
     private  final DoctorsRepository doctorsRepository;
     private  final PatientRepository patientRepository;
+    private final LabTechnicianRepository labTechnicianRepository;
 
     public Users findUserByTheUsername(String error){
 
@@ -50,5 +53,12 @@ public class FindingUsers {
         if (patient.isEmpty())  throw new MyException(HttpStatus.NOT_FOUND.value()," patient not found");
 
         return patient.get();
+    }
+
+    public LabTechnicians findTheLabTechnicianByUserID(Users user){
+        Optional<LabTechnicians> labTechnician = labTechnicianRepository.findByUserID(user);
+        if(labTechnician.isEmpty())   throw new MyException(HttpStatus.NOT_FOUND.value(),"lab technician not found");
+
+        return labTechnician.get();
     }
 }

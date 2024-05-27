@@ -114,6 +114,7 @@ public class ConsultationService {
                           .patientName(sendToLabRequestDto.getPatientName())
                           .patientID(patient)
                           .labTestRequest(el)
+                          .completed(false)
                           .creationTimestamp(time)
                           .build();
 
@@ -144,6 +145,7 @@ public class ConsultationService {
                            .patientName(sendToLabRequestDto.getPatientName())
                            .patientID(patient)
                            .labTestRequest(el)
+                           .completed(false)
                            .creationTimestamp(time)
                            .build();
 
@@ -176,6 +178,7 @@ public class ConsultationService {
                            .patientName(sendToLabRequestDto.getPatientName())
                            .patientID(patient)
                            .labTestRequest(el)
+                           .completed(false)
                            .creationTimestamp(time)
                            .build();
 
@@ -206,6 +209,7 @@ public class ConsultationService {
                            .patientName(sendToLabRequestDto.getPatientName())
                            .patientID(patient)
                            .labTestRequest(el)
+                           .completed(false)
                            .creationTimestamp(time)
                            .build();
 

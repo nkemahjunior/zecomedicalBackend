@@ -56,5 +56,9 @@ public class LabParasitology {
     @Column(name = "creation_timestamp")
     private LocalDateTime creationTimestamp;
 
+    @Column(name =  "notes")
+    private String notes;
+
+
 
 }
