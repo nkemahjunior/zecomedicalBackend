@@ -83,14 +83,14 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**","/email/**","/testEmail","/static/**" ).permitAll()
                         .anyRequest().authenticated()
 
-                )/*.csrf((csrf) -> csrf
+                ).csrf((csrf) -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers("/auth/**"));*/
-                 .csrf(AbstractHttpConfigurer::disable);
+                        .ignoringRequestMatchers("/auth/**"));
+                /* .csrf(AbstractHttpConfigurer::disable);*/
 
         return http.build();
     }

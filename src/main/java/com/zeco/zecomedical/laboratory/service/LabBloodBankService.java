@@ -28,9 +28,14 @@ public class LabBloodBankService {
     }
 
 
+
+
     public Page<LabRequestProjections> getLabRequestBloodBankByPatientName(String name,Integer page, Integer size){
         return  labBloodBankRepository.findByCompletedAndPatientNameIgnoreCaseContaining(false,name,PageRequest.of(page,size));
     }
+
+
+
 
     public RequestResponse postLabBloodBankResults(TestResults results){
 

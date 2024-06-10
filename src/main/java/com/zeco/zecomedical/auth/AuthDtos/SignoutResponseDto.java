@@ -7,5 +7,6 @@ import lombok.Data;
 @Data
 public class SignoutResponseDto {
 
-    private String messaqge;
+    private Integer status;
+    private String message;
 }

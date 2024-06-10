@@ -42,7 +42,11 @@ public class FileUploadService {
 
             //upload returns a map of key pair values, and url is one the keys, check cloudinary docs and check response to see all the key pair values
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(), params1);
-           String url =  uploadResult.get("url").toString();
+           String url =  uploadResult.get("secure_url").toString();
+
+           MyDebug.printBlock();
+           log.error(uploadResult);
+           MyDebug.printBlock();
 
 
            return  url;

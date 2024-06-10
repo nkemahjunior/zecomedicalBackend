@@ -1,5 +1,6 @@
 package com.zeco.zecomedical.general.repositories;
 
+import com.zeco.zecomedical.general.projections.lab.LabImmunologyProjection;
 import com.zeco.zecomedical.general.projections.lab.LabRequestProjections;
 import com.zeco.zecomedical.model.Consultation;
 import com.zeco.zecomedical.model.LabImmunology;
@@ -11,9 +12,11 @@ import java.util.List;
 
 public interface LabImmunologyRepository extends JpaRepository<LabImmunology,Long> {
 
-    List<LabImmunology> findByLabResultsImmunology(Consultation consultation);
+    List<LabRequestProjections> findByLabResultsImmunology(Consultation consultation);
 
     Page<LabRequestProjections> findByCompleted(Boolean completed, Pageable pageable);
 
     Page<LabRequestProjections> findByCompletedAndPatientNameIgnoreCaseContaining(Boolean completed,String name,Pageable pageable);
+
+    List<LabImmunologyProjection> findByLabResultsImmunologyAndCompleted(Consultation consultation,Boolean completed);
 }

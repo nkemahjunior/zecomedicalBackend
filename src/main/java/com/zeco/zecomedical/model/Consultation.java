@@ -65,7 +65,9 @@ public class Consultation {
     private Boolean sessionFinished;
 
     @Column(name = "medecine_prescribed")
-    private List<String> medicinePrescribed;
+    private String medicinePrescribed;
 
+    @Column(name = "status")
+    private String status;
 
 }

@@ -4,11 +4,13 @@ package com.zeco.zecomedical.patientBookAppointments.controller;
 import com.zeco.zecomedical.doctorsPostAppointment.dtos.MyAppointmentsResponse;
 import com.zeco.zecomedical.general.projections.patient.doctorsAvailable.DoctorsAvailableProjection;
 import com.zeco.zecomedical.patientBookAppointments.dtos.AppointmentRequestRequest;
+import com.zeco.zecomedical.patientBookAppointments.dtos.PatientInfoResponse;
 import com.zeco.zecomedical.patientBookAppointments.service.AppointmentsHistory;
 import com.zeco.zecomedical.patientBookAppointments.service.BookAppointmentsService;
 import com.zeco.zecomedical.dto.RequestResponse;
 import com.zeco.zecomedical.general.repositories.DoctorsAvailableRepository;
 import com.zeco.zecomedical.model.DoctorsAvailableForAppointment;
+import com.zeco.zecomedical.patientBookAppointments.service.PatientInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +31,13 @@ public class BookAppointmentController {
     private final DoctorsAvailableRepository doctorsAvailableRepository;
     private final BookAppointmentsService bookAppointmentsService;
     private final AppointmentsHistory appointmentsHistory;
+    private final PatientInfoService patientInfoService;
+
+
+    @GetMapping("/info")
+    public ResponseEntity<PatientInfoResponse> getPatientInfoEndpoint(){
+        return  ResponseEntity.ok(patientInfoService.getPatientInfo());
+    }
 
 
     @GetMapping("/available_doctors/{speciality}")

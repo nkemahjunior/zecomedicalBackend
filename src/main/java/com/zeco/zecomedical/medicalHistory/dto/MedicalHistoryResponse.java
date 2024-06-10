@@ -1,5 +1,7 @@
 package com.zeco.zecomedical.medicalHistory.dto;
 
+import com.zeco.zecomedical.general.projections.lab.LabRequestProjections;
+import com.zeco.zecomedical.general.projections.patient.doctorsAvailable.DoctorsTable;
 import com.zeco.zecomedical.model.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +21,7 @@ public class MedicalHistoryResponse {
 
     private Long id;
 
-    private Doctors doctorID;
+    private DoctorsTable doctorID;
 
     private RegisteredPatients patientID;
 
@@ -31,15 +33,15 @@ public class MedicalHistoryResponse {
 
     private LocalDateTime checkupDate;
 
-    private List<LabBloodBank> labResultsBloodBank;
+    private List<LabRequestProjections> labResultsBloodBank;
 
-    private List<LabImmunology> labResultsImmunology;
+    private List<LabRequestProjections> labResultsImmunology;
 
-    private List<LabMicrobiology> labResultsMicrobiology;
+    private List<LabRequestProjections> labResultsMicrobiology;
 
-    private List<LabParasitology> labResultsParasitology;
+    private List<LabRequestProjections> labResultsParasitology;
 
     private Boolean sessionFinished;
 
-    private List<String> medicinePrescribed;
+    private String medicinePrescribed;
 }

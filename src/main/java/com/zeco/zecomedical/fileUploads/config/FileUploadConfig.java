@@ -25,7 +25,7 @@ public class FileUploadConfig {
         return   new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", cloudName,
                 "api_key", apiKey,
-                "api_secret", apiSecret
-                /*"secure", true*/));
+                "api_secret", apiSecret,
+                "secure", true));// all images url will be returned as https
     }
 }

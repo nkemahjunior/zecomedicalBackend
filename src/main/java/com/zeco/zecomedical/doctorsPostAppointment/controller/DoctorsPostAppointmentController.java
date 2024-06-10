@@ -61,6 +61,11 @@ public class DoctorsPostAppointmentController {
         return ResponseEntity.ok(getAndChangeAppointmentDetailsService.updateAppointmentStatus(id,status));
     }
 
+    @DeleteMapping("/appointment/{id}")
+    public ResponseEntity<RequestResponse> deleteRequestEndpoint(@PathVariable Long id){
+        return  ResponseEntity.ok(getAndChangeAppointmentDetailsService.deleteRequest(id));
+    }
+
 
 
     /*@PutMapping("/appointment/diagnosis/{id}")

@@ -1,5 +1,6 @@
 package com.zeco.zecomedical.general.repositories;
 
+import com.zeco.zecomedical.general.projections.consultations.ConsultationsProjection;
 import com.zeco.zecomedical.model.*;
 import jakarta.persistence.Column;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,7 +24,8 @@ public interface ConsultationRepository extends JpaRepository<Consultation,Long>
     Optional<Consultation> findByDoctorIDAndPatientIDAndSessionFinished(Doctors doctor,RegisteredPatients patients,Boolean sessionFinished);
 
 
-    List<Consultation> findByPatientIDAndSessionFinished(RegisteredPatients patient,Boolean sessionFinished);
+    List<ConsultationsProjection> findByPatientIDAndSessionFinishedOrderByTimestampDesc(RegisteredPatients patient,Boolean sessionFinished);
+
 
     Optional<Consultation> findByLabResultsBloodBank(UUID bloodBank);
 
@@ -32,6 +34,8 @@ public interface ConsultationRepository extends JpaRepository<Consultation,Long>
     Optional<Consultation> findByLabResultsMicrobiology(UUID microbiology);
 
     Optional<Consultation> findByLabResultsParasitology(UUID parasitology);
+
+    List<ConsultationsProjection> findByDoctorIDAndSessionFinishedAndStatus(Doctors doctorID, Boolean sessionFinished, String status);
 
 
 

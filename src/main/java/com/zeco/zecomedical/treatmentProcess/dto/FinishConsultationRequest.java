@@ -25,7 +25,7 @@ public class FinishConsultationRequest {
 
     private Integer checkupMin;
 
-    private List<String> medicinePrescribed;
+    private String medicinePrescribed;
 
     //private Boolean sessionFinished;
 }

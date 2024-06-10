@@ -1,6 +1,7 @@
 package com.zeco.zecomedical.general.repositories;
 
 import com.zeco.zecomedical.general.projections.doctors.appointmentRequest.MyAppointmentRequestProjections;
+import com.zeco.zecomedical.general.projections.patient.doctorsAvailable.AppointmentProjectionsPatient;
 import com.zeco.zecomedical.model.AppointmentRequests;
 import com.zeco.zecomedical.model.Doctors;
 import com.zeco.zecomedical.model.RegisteredPatients;
@@ -25,7 +26,7 @@ public interface AppointmentRequestsRepository extends JpaRepository<Appointment
 
     List<AppointmentRequests> findByPatientID(RegisteredPatients patient);
 
-    List<AppointmentRequests> findByPatientIDAndStatusAndDateTimeGreaterThan(RegisteredPatients patient,String status,LocalDateTime dateTime);
+    List<AppointmentProjectionsPatient> findByPatientIDAndStatusAndDateTimeGreaterThanOrderByDateTime(RegisteredPatients patient, String status, LocalDateTime dateTime);
 
     Boolean existsByPatientIDAndDateTime(RegisteredPatients patient , LocalDateTime dateTime);
 }

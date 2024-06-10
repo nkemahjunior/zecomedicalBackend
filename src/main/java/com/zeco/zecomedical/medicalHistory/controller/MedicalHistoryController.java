@@ -21,7 +21,14 @@ public class MedicalHistoryController {
 
     @GetMapping("/{patientID}")
     public ResponseEntity<List<MedicalHistoryResponse>> getAPatientMedicalHistoryEndpoint(@PathVariable Long patientID){
-        return ResponseEntity.ok(medicalHistoryService.getAPatientMedicalHistory(patientID));
+        return ResponseEntity.ok(medicalHistoryService.getAPatientMedicalHistoryDoctor(patientID));
+    }
+
+
+
+    @GetMapping("/patient")
+    public ResponseEntity<List<MedicalHistoryResponse>> getAPatientMedicalHistoryPatientEndpoint(){
+        return ResponseEntity.ok(medicalHistoryService.getMedicalHistoryPatient());
     }
 
 }

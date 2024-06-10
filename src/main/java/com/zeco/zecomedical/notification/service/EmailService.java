@@ -71,14 +71,14 @@ import java.time.LocalDate;
 
      @Async
      @Retryable(maxAttempts = 5, backoff = @Backoff(delay = 30000, multiplier = 2))
-     public CompletableFuture<Void> appointmentStatusEmail(String patientName, String doctorName, String reason, LocalDate appointmentDate,String status){
+     public CompletableFuture<Void> appointmentStatusEmail(String patientName,String email, String doctorName, String reason, LocalDate appointmentDate,String status){
 
          return  CompletableFuture.runAsync( () -> {
          MimeMessagePreparator preparator= new MimeMessagePreparator() {
 
              @Override
              public void prepare(MimeMessage mimeMessage) throws Exception {
-             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress("nkemahjunior679205967@gmail.com"));
+             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
              mimeMessage.setFrom("nkemahjunior679205967@gmail.com");
              mimeMessage.setSubject("update on your appointment status");
              mimeMessage.setText("Hello "+patientName+", your appointment with Doctor "+doctorName +" on "+ appointmentDate +" for "+reason+" has been "+status);

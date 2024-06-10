@@ -2,6 +2,7 @@ package com.zeco.zecomedical.patientBookAppointments.service;
 
 
 import com.zeco.zecomedical.doctorsPostAppointment.dtos.MyAppointmentsResponse;
+import com.zeco.zecomedical.general.projections.patient.doctorsAvailable.AppointmentProjectionsPatient;
 import com.zeco.zecomedical.general.repositories.AppointmentRequestsRepository;
 import com.zeco.zecomedical.general.utils.FindingUsers;
 import com.zeco.zecomedical.model.AppointmentRequests;
@@ -49,7 +50,7 @@ public class AppointmentsHistory {
         Users user = findingUsers.findUserByTheUsername("user not found");
         RegisteredPatients patient = findingUsers.findThePatientByUserID(user);
 
-        List<AppointmentRequests> myAppointments = appointmentRequestsRepository.findByPatientIDAndStatusAndDateTimeGreaterThan(patient,status, LocalDateTime.now());
+        List<AppointmentProjectionsPatient> myAppointments = appointmentRequestsRepository.findByPatientIDAndStatusAndDateTimeGreaterThanOrderByDateTime(patient,status, LocalDateTime.now());
 
         return  myAppointments.stream().map(e -> MyAppointmentsResponse.builder()
                 .id(e.getId())
@@ -57,10 +58,10 @@ public class AppointmentsHistory {
                 .reason(e.getReason())
                 .complain_notes(e.getComplainNotes())
                 //.rende_vouz(e.getRende_vouz())
-                //.doctorID(e.getDoctorID())
+                .doctorID(e.getDoctorID())
                // .patient_id(e.getPatientID())
                 //.appointment_id(e.getAppointment_id())
-               // .dateTime(e.getDateTime())
+               .dateTime(e.getDateTime())
                 .build()
         ).toList();
 

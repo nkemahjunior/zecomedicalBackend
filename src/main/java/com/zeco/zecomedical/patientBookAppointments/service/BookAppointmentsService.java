@@ -47,10 +47,7 @@ public class BookAppointmentsService {
 
        List<Doctors> doctors = doctorsRepository.findBySpeciality(speciality);
 
-        MyDebug.printBlock();
-        log.error("selecting doctors");
-        System.out.println(doctors);
-        MyDebug.printBlock();
+
 
 
       List<DoctorsAvailableForAppointment> doctorBySpeciality = new ArrayList<>();
@@ -60,10 +57,7 @@ public class BookAppointmentsService {
           //TODO bad work boy, you are suppose to filter while fetching from the database not fetching all before filtering, make and arrange this
            List<DoctorsAvailableForAppointment> doc = doctorsAvailableRepository.findByDoctorID(el);
 
-          MyDebug.printBlock();
-          log.error("selecting doctors for appointment");
-          System.out.println(doc);
-          MyDebug.printBlock();
+
 
            doc.forEach( e -> {
                if(e != null && e.getTimeFrom().isAfter(today))
@@ -76,47 +70,62 @@ public class BookAppointmentsService {
 
     }
 
+
+
+
+
+
+
+
+
+
+
     public RequestResponse bookAppointment(AppointmentRequestRequest data){
 
 
-        Users user1 = findingUsers.findUserByTheUsername("error getting user ,login again");
 
-        Optional<RegisteredPatients> patient = patientRepository.findByPatientID(user1);
-        if(patient.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"error getting user ,login again" );
-
-        LocalDateTime dateTime = LocalDateTime.of(data.getStartYear(),data.getStartMonth(),data.getStartDay(),0,0);
+        if(Objects.equals(data.getReason(), "consultation") || Objects.equals(data.getReason(), "checkup")){
 
 
-        if(appointmentRequestsRepository.existsByPatientIDAndDateTime(patient.get(),dateTime)){
-            return RequestResponse.builder()
-                    .status(HttpStatus.CONFLICT.value())
-                    .message("you already booked an appointment at that time")
+            Users user1 = findingUsers.findUserByTheUsername("error getting user ,login again");
+
+            Optional<RegisteredPatients> patient = patientRepository.findByPatientID(user1);
+            if(patient.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"error getting user ,login again" );
+
+            LocalDateTime dateTime = LocalDateTime.of(data.getStartYear(),data.getStartMonth(),data.getStartDay(),0,0);
+
+
+            if(appointmentRequestsRepository.existsByPatientIDAndDateTime(patient.get(),dateTime)){
+                return RequestResponse.builder()
+                        .status(HttpStatus.CONFLICT.value())
+                        .message("you already booked an appointment at that time")
+                        .build();
+            }
+
+
+            Optional<Doctors> doc = doctorsRepository.findById(data.getDoctor_id());
+            Optional<DoctorsAvailableForAppointment> appointment = doctorsAvailableRepository.findById(data.getAppointment_id());
+
+
+            if(doc.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(), "error getting doctor with id " + data.getDoctor_id());
+            //if(patientsOptional.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"patient with id "+data.getPatient_id()+" not found");
+            if(appointment.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(), "appointment with id "+data.getAppointment_id() +" not found" );
+
+
+
+
+            AppointmentRequests appointmentRequests = AppointmentRequests.builder()
+                    .status("PENDING")
+                    .reason(data.getReason())
+                    .complainNotes(data.getComplain_notes())
+                    //.rende_vouz(data.getRende_vouz()) why are you asking if its a rende-vouz when u can get that info from the reason
+                    .doctorID(doc.get())
+                    .patientID(patient.get())
+                    .appointment_id(appointment.get())
+                    .dateTime(dateTime)
                     .build();
-        }
 
-
-        Optional<Doctors> doc = doctorsRepository.findById(data.getDoctor_id());
-        Optional<DoctorsAvailableForAppointment> appointment = doctorsAvailableRepository.findById(data.getAppointment_id());
-
-
-        if(doc.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(), "error getting doctor with id " + data.getDoctor_id());
-        //if(patientsOptional.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"patient with id "+data.getPatient_id()+" not found");
-        if(appointment.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(), "appointment with id "+data.getAppointment_id() +" not found" );
-
-
-
-        AppointmentRequests appointmentRequests = AppointmentRequests.builder()
-                .status("PENDING")
-                .reason(data.getReason())
-                .complainNotes(data.getComplain_notes())
-                //.rende_vouz(data.getRende_vouz()) why are you asking if its a rende-vouz when u can get that info from the reason
-                .doctorID(doc.get())
-                .patientID(patient.get())
-                .appointment_id(appointment.get())
-                .dateTime(dateTime)
-                .build();
-
-           appointmentRequestsRepository.save(appointmentRequests);
+            appointmentRequestsRepository.save(appointmentRequests);
 
             return RequestResponse.builder()
                     .status(HttpStatus.CREATED.value())
@@ -124,6 +133,9 @@ public class BookAppointmentsService {
                     .build();
 
 
+        }else {
+            throw new RuntimeException("wrong appointment request reason ");
+        }
 
     }
 

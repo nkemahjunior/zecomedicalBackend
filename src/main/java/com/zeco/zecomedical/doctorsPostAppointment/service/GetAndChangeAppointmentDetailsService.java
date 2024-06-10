@@ -9,6 +9,7 @@ import com.zeco.zecomedical.general.repositories.DoctorsRepository;
 import com.zeco.zecomedical.general.repositories.PatientRepository;
 import com.zeco.zecomedical.general.repositories.UsersRepository;
 import com.zeco.zecomedical.general.utils.FindingUsers;
+import com.zeco.zecomedical.general.utils.MyDebug;
 import com.zeco.zecomedical.model.AppointmentRequests;
 import com.zeco.zecomedical.model.Doctors;
 import com.zeco.zecomedical.model.RegisteredPatients;
@@ -73,6 +74,12 @@ public class GetAndChangeAppointmentDetailsService {
     }
 
 
+
+
+
+
+
+
     public Page<MyAppointmentsResponse> getAcceptedUpcomingAppointments(Integer page, Integer size){
 
         Users user = findingUsers.findUserByTheUsername("user not found");
@@ -97,6 +104,15 @@ public class GetAndChangeAppointmentDetailsService {
         );
 
     }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -139,8 +155,10 @@ public class GetAndChangeAppointmentDetailsService {
 
         if(status.equals("ACCEPTED") || status.equals("DECLINED") /*|| status.equals("RESCHEDULED")*/) {
 
+
             Optional<AppointmentRequests> appointment = appointmentRequestsRepository.findById(id);
             if (appointment.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(), "appointment not found");
+
 
             Optional<Doctors> doctor = doctorsRepository.findById(appointment.get().getDoctorID().getDoctor_id());
             if(doctor.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(), "appointment doctor  not found");
@@ -151,7 +169,8 @@ public class GetAndChangeAppointmentDetailsService {
             String patientName = patient.get().getPatientID().getName();
             String doctorName = doctor.get().getUuid().getName();
             String reason = appointment.get().getReason();
-            LocalDate appointmentDate = LocalDate.from(appointment.get().getAppointment_id().getTimeFrom());
+            //LocalDate appointmentDate = LocalDate.from(appointment.get().getAppointment_id().getTimeFrom());
+            LocalDate appointmentDate = LocalDate.from(appointment.get().getDateTime());
 
 
             AppointmentRequests appointment1 = appointment.get();
@@ -159,7 +178,7 @@ public class GetAndChangeAppointmentDetailsService {
             appointmentRequestsRepository.save(appointment1);
 
             //async method
-            emailService.appointmentStatusEmail(patientName,doctorName,reason,appointmentDate,status);
+            emailService.appointmentStatusEmail(patientName,patient.get().getEmail(),doctorName,reason,appointmentDate,status);
 
 
 
@@ -174,6 +193,15 @@ public class GetAndChangeAppointmentDetailsService {
         }
     }
 
+
+    public RequestResponse deleteRequest(Long id){
+        appointmentRequestsRepository.deleteById(id);
+
+        return RequestResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("upcoming request deleted")
+                .build();
+    }
 
 
 

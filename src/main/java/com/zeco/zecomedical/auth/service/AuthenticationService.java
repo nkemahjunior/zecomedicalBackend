@@ -146,7 +146,7 @@ public class AuthenticationService {
         usersRepository.save(user1);
 
         logoutHandler.logout(request, response, authentication);
-        return new SignoutResponseDto("successfully signed out");
+        return new SignoutResponseDto(HttpStatus.OK.value(), "successfully signed out");
 
 
 

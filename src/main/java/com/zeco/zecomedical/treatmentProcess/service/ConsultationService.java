@@ -2,14 +2,15 @@ package com.zeco.zecomedical.treatmentProcess.service;
 
 import com.zeco.zecomedical.customExceptions.MyException;
 import com.zeco.zecomedical.dto.RequestResponse;
+import com.zeco.zecomedical.general.projections.consultations.ConsultationsProjection;
+import com.zeco.zecomedical.general.projections.doctors.appointmentRequest.PatientsTable;
 import com.zeco.zecomedical.general.repositories.*;
 import com.zeco.zecomedical.general.utils.FindingUsers;
 import com.zeco.zecomedical.general.utils.MyDebug;
 import com.zeco.zecomedical.model.*;
 
 import com.zeco.zecomedical.patientBookAppointments.service.BookAppointmentsService;
-import com.zeco.zecomedical.treatmentProcess.dto.FinishConsultationRequest;
-import com.zeco.zecomedical.treatmentProcess.dto.SendToLabRequestDto;
+import com.zeco.zecomedical.treatmentProcess.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,10 +41,27 @@ public class ConsultationService {
    private final AppointmentRequestsRepository appointmentRequestsRepository;
 
 
+   public PatientInfoResponse getPatientInfo(Long id){
+      Optional<RegisteredPatients> patientOptional =  patientRepository.findById(id);
+      if(patientOptional.isEmpty()) throw  new RuntimeException("patient not found");
+      RegisteredPatients patient = patientOptional.get();
+
+      return PatientInfoResponse.builder()
+              .id(patient.getId())
+              .name(patient.getPatientID().getName())
+              .gender(patient.getPatientID().getGender())
+              .dob(patient.getPatientID().getDob())
+              .profilePhotoUrl(patient.getPatientID().getProfilePhotoUrl())
+              .bloodPressure(patient.getBloodPressure())
+              .bloodGroup(patient.getBloodGroup())
+              .weight(patient.getWeight())
+              .build();
+   }
 
 
 
-    public RequestResponse startConsultation(Long patientID){
+
+    public StartConsultationResponse startConsultation(Long patientID){
 
         RegisteredPatients patient = RegisteredPatients.builder().id(patientID).build();
        Users user = findingUsers.findUserByTheUsername("user not found");
@@ -55,11 +74,12 @@ public class ConsultationService {
                 .sessionFinished(false)
                 .build();
 
-        consultationRepository.save(consultation);
+        Consultation savedConsultation = consultationRepository.save(consultation);
 
-        return  RequestResponse.builder()
+        return  StartConsultationResponse.builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Starting consultation")
+                .consultationID(savedConsultation.getId())
                 .build();
     }
 
@@ -70,10 +90,22 @@ public class ConsultationService {
 
 
     @Transactional
-    public RequestResponse sendPatientToLab(SendToLabRequestDto sendToLabRequestDto){
+    public SendToLabResponse sendPatientToLab(SendToLabRequestDto sendToLabRequestDto){
         // bb = bloodBank, im=immunology, mb = microbiology, ps = parasitology
         Users user = findingUsers.findUserByTheUsername("user not found");
+
+
+        MyDebug.printBlock();
+        log.error(user);
+        MyDebug.printBlock();
+
         Doctors doctor = findingUsers.findTheDoctorByUserID(user);
+
+        MyDebug.printBlock();
+        log.error("ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        log.error(doctor);
+        MyDebug.printBlock();
+
 
 
         Optional<RegisteredPatients> patient1 = patientRepository.findById(sendToLabRequestDto.getPatientID());
@@ -121,9 +153,10 @@ public class ConsultationService {
                   labBloodBankRepository.save(bloodBankTests);
               });
 
-               return  RequestResponse.builder()
+               return  SendToLabResponse.builder()
                        .status(HttpStatus.CREATED.value())
                        .message("lab request sent")
+                       .consultationID(key)
                        .build();
 
 
@@ -152,11 +185,12 @@ public class ConsultationService {
                    labImmunologyRepository.save(immunologyTests);
                });
 
-               return  RequestResponse.builder()
+
+               return  SendToLabResponse.builder()
                        .status(HttpStatus.CREATED.value())
                        .message("lab request sent")
+                       .consultationID(key)
                        .build();
-
 
 
            case "mb" :
@@ -185,9 +219,10 @@ public class ConsultationService {
                    labMicrobiologyRepository.save(microbiologyTests);
                });
 
-               return  RequestResponse.builder()
+               return  SendToLabResponse.builder()
                        .status(HttpStatus.CREATED.value())
                        .message("lab request sent")
+                       .consultationID(key)
                        .build();
 
 
@@ -216,15 +251,18 @@ public class ConsultationService {
                    labParasitologyRepository.save(parasitologyTests);
                });
 
-               return  RequestResponse.builder()
+
+               return  SendToLabResponse.builder()
                        .status(HttpStatus.CREATED.value())
                        .message("lab request sent")
+                       .consultationID(key)
                        .build();
 
            default:
-               return  RequestResponse.builder()
+               return  SendToLabResponse.builder()
                        .status(HttpStatus.BAD_REQUEST.value())
                        .message("error sending lab request,check lab initials")
+                       .consultationID(null)
                        .build();
        }
 
@@ -256,6 +294,60 @@ public class ConsultationService {
 
 
 
+    public ConsultationResponse pauseConsultation(PauseConsultationRequest request){
+        Optional<Consultation> consultationOpt = consultationRepository.findById(request.getConsultationID());
+        if(consultationOpt.isEmpty()) throw new RuntimeException("consultation not found");
+
+        Consultation consultation = consultationOpt.get();
+        consultation.setDiagnosisNotes(request.getDiagnosisNotes());
+        consultation.setMedicinePrescribed(request.getPrescribedDrugs());
+        consultation.setStatus("PAUSED");
+
+        Consultation pausedConsultation = consultationRepository.save(consultation);
+
+
+        return ConsultationResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("consultation session paused, you can attend to other patients")
+                .id(pausedConsultation.getId())
+                .patientID(pausedConsultation.getPatientID().getId())
+                .patientName(pausedConsultation.getPatientID().getPatientID().getName())
+                .diagnosisNotes(pausedConsultation.getDiagnosisNotes())
+                .labResultsBloodBank(pausedConsultation.getLabResultsBloodBank())
+                .labResultsParasitology(pausedConsultation.getLabResultsParasitology())
+                .labResultsMicrobiology(pausedConsultation.getLabResultsParasitology())
+                .labResultsImmunology(pausedConsultation.getLabResultsImmunology())
+                .medicinePrescribed(pausedConsultation.getMedicinePrescribed())
+                .build();
+    }
+
+
+    public List<ConsultationResponse> getPausedConsultations(){
+
+        Users user = findingUsers.findUserByTheUsername("user not found");
+        Doctors doctor = findingUsers.findTheDoctorByUserID(user);
+
+        List<ConsultationsProjection> pausedConsultations = consultationRepository.findByDoctorIDAndSessionFinishedAndStatus(doctor,false,"PAUSED");
+
+        return  pausedConsultations.stream().map(el -> ConsultationResponse.builder()
+                .id(el.getId())
+                //.patientID(el.getPatientID())
+                .patientID(el.getPatientID().getId())
+                .patientName(el.getPatientID().getPatientID().getName())
+                .diagnosisNotes(el.getDiagnosisNotes())
+                .labResultsBloodBank(el.getLabResultsBloodBank())
+                .labResultsParasitology(el.getLabResultsParasitology())
+                .labResultsMicrobiology(el.getLabResultsParasitology())
+                .labResultsImmunology(el.getLabResultsImmunology())
+                .medicinePrescribed(el.getMedicinePrescribed())
+                .build()
+
+        ).toList();
+    }
+
+
+
+
 
 
     @Transactional
@@ -263,31 +355,46 @@ public class ConsultationService {
 
         Object[] array = getCurrentConsultation(finishConsultationRequest.getPatientID());
 
-        if(finishConsultationRequest.getComeForCheckup())
-            createAppointment(finishConsultationRequest,(Doctors) array[0],(RegisteredPatients) array[1]);
+        Integer checkupYear = null;
+        Integer checkupMonth = null;
+        Integer checkupDay = null;
+        Integer checkupHour = null;
+        Integer checkupMin = null;
+        LocalDateTime checkupDate = null;
+
+
+        if(finishConsultationRequest.getComeForCheckup()){
+
+            checkupYear = finishConsultationRequest.getCheckupYear();
+            checkupMonth = finishConsultationRequest.getCheckupMonth();
+            checkupDay = finishConsultationRequest.getCheckupDay();
+            checkupHour = finishConsultationRequest.getCheckupHour();
+            checkupMin = finishConsultationRequest.getCheckupMin();
+            checkupDate = LocalDateTime.of(checkupYear,checkupMonth,checkupDay,checkupHour,checkupMin);
+
+
+            if (checkupDate.isBefore(LocalDateTime.now())) throw new MyException(HttpStatus.BAD_REQUEST.value(), "appointment date should be after today");
+
+
+            createAppointment(checkupDate, (Doctors) array[0], (RegisteredPatients) array[1]);
+        }
+
 
 
         Consultation consultation = (Consultation) array[2];
-         Integer checkupYear = finishConsultationRequest.getCheckupYear();
-         Integer checkupMonth = finishConsultationRequest.getCheckupMonth();
-         Integer checkupDay = finishConsultationRequest.getCheckupDay();
-         Integer checkupHour = finishConsultationRequest.getCheckupHour();
-         Integer checkupMin = finishConsultationRequest.getCheckupMin();
-         LocalDateTime checkupDate = LocalDateTime.of(checkupYear,checkupMonth,checkupDay,checkupHour,checkupMin);
-
-         if (checkupDate.isBefore(LocalDateTime.now())) throw new MyException(HttpStatus.BAD_REQUEST.value(), "appointment date should be after today");
 
         consultation.setDiagnosisNotes(finishConsultationRequest.getDiagnosisNotes());
         consultation.setComeForCheckup(finishConsultationRequest.getComeForCheckup());
         consultation.setCheckupDate(checkupDate);
         consultation.setMedicinePrescribed(finishConsultationRequest.getMedicinePrescribed());
+        consultation.setStatus("FINISHED");
 
         consultation.setSessionFinished(true);
         consultationRepository.save(consultation);
 
         return RequestResponse.builder()
                 .status(HttpStatus.OK.value())
-                .message("consultation updated")
+                .message("consultation finished")
                 .build();
 
     }
@@ -296,15 +403,15 @@ public class ConsultationService {
 
 
 
-    public void createAppointment(FinishConsultationRequest data, Doctors doctor_id, RegisteredPatients patient_id){
+    public void createAppointment(LocalDateTime checkUpDate, Doctors doctor_id, RegisteredPatients patient_id){
         AppointmentRequests appointment = AppointmentRequests.builder()
                 .status("PENDING")
-                .reason("CHECK_UP")
+                .reason("checkup")
                 .complainNotes("coming for follow up")
                 //.rende_vouz(true) checkup and rende vouz is thesame thing
                 .doctorID(doctor_id)
                 .patientID(patient_id)
-                .dateTime(LocalDateTime.of(data.getCheckupYear(),data.getCheckupMonth(), data.getCheckupDay(), data.getCheckupHour(), data.getCheckupMin()))
+                .dateTime(checkUpDate)
                 .build();
 
         appointmentRequestsRepository.save(appointment);
