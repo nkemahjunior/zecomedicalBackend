@@ -14,7 +14,7 @@ import java.util.Calendar;
 @Builder
 public class PatientInfoResponse {
 
-    //private Long id;
+    private Long id;
 
     private Float weight;
 

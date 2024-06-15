@@ -24,6 +24,7 @@ public class PatientInfoService {
 
 
         return PatientInfoResponse.builder()
+                .id(patient.getId())
                 .weight(patient.getWeight())
                 .bloodGroup(patient.getBloodGroup())
                 .bloodPressure(patient.getBloodPressure())
