@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface DoctorsAvailableRepository extends JpaRepository<DoctorsAvailableForAppointment,Long> {
 
-    List<DoctorsAvailableForAppointment> findByDoctorID(Doctors doctor);
+    List<DoctorsAvailableProjection> findByDoctorID(Doctors doctor);
     //List<DoctorsAvailableProjection> findByDoctorID(DoctorsAvailableProjection);
     //List<DoctorsAvailableForAppointment> findAll(Pageable pageable);
 

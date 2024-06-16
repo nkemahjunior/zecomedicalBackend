@@ -41,7 +41,7 @@ public class BookAppointmentController {
 
 
     @GetMapping("/available_doctors/{speciality}")
-    public ResponseEntity< List<DoctorsAvailableForAppointment> > getDoctorsAvailableForAppoinmentBySpeciality(@PathVariable(name = "speciality") String speciality){
+    public ResponseEntity< List<DoctorsAvailableProjection> > getDoctorsAvailableForAppoinmentBySpeciality(@PathVariable(name = "speciality") String speciality){
         return ResponseEntity.ok(bookAppointmentsService.getAllDoctorsAvailableForAppointmentFilterBySpeciality(speciality));
     }
 

@@ -59,6 +59,13 @@ public class LaboratoryController {
         return  ResponseEntity.ok(labBloodBankService.getLabRequestBloodBankByPatientName(patientName,page,size));
     }
 
+
+    //only the patient is using this api
+    @GetMapping("/bloodBank/results/patient")
+    public ResponseEntity<List<LabRequestProjections>> getLabBloodBankRequestsPatient(){
+        return  ResponseEntity.ok(labBloodBankService.getLabRequestBloodBankPatient());
+    }
+
     @PostMapping("/bloodBank/results")
     public ResponseEntity<RequestResponse> postLabTestResultBloodBankEndpoint(@RequestBody TestResults result){
         return  ResponseEntity.ok(labBloodBankService.postLabBloodBankResults(result));

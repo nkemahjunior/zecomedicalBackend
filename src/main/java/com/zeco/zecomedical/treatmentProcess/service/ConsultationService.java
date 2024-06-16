@@ -99,23 +99,13 @@ public class ConsultationService {
         log.error(user);
         MyDebug.printBlock();
 
-        Doctors doctor = findingUsers.findTheDoctorByUserID(user);
-
-        MyDebug.printBlock();
-        log.error("ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-        log.error(doctor);
-        MyDebug.printBlock();
-
-
+        Doctors doctor = new Doctors();
+        doctor.setDoctor_id(7L);
 
         Optional<RegisteredPatients> patient1 = patientRepository.findById(sendToLabRequestDto.getPatientID());
-        if(patient1.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"patient not found");
-
 
         UUID key = UUID.randomUUID();
         Optional<Consultation> consultationOptional = consultationRepository.findByDoctorIDAndPatientIDAndSessionFinished(doctor,patient1.get(),false);
-        if(consultationOptional.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"start a consultation session first");
-
 
         RegisteredPatients patient = RegisteredPatients.builder().id(sendToLabRequestDto.getPatientID()).build();
         LocalDateTime time = LocalDateTime.now();
@@ -160,103 +150,13 @@ public class ConsultationService {
                        .build();
 
 
-           case "im":
-               consultation.setLabResultsImmunology(key);
-               consultationRepository.save(consultation);
-
-               Optional<Consultation> consultationID2 = consultationRepository.findByLabResultsImmunology(key);
-               if(consultationID2.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"consultation id not found");
-
-               Laboratories laboratoryID2 = Laboratories.builder().id(3L).build();
 
 
-               sendToLabRequestDto.getLabTestRequest().forEach( el -> {
-                   LabImmunology immunologyTests = LabImmunology.builder()
-                           .labResultsImmunology(consultationID2.get())
-                           .doctorID(doctor)
-                           .labDepartment(laboratoryID2)
-                           .patientName(sendToLabRequestDto.getPatientName())
-                           .patientID(patient)
-                           .labTestRequest(el)
-                           .completed(false)
-                           .creationTimestamp(time)
-                           .build();
-
-                   labImmunologyRepository.save(immunologyTests);
-               });
 
 
-               return  SendToLabResponse.builder()
-                       .status(HttpStatus.CREATED.value())
-                       .message("lab request sent")
-                       .consultationID(key)
-                       .build();
 
 
-           case "mb" :
-               consultation.setLabResultsMicrobiology(key);
-               consultationRepository.save(consultation);
 
-
-               Optional<Consultation> consultationID3 = consultationRepository.findByLabResultsMicrobiology(key);
-               if(consultationID3.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"consultation id not found");
-
-               Laboratories laboratoryID3 = Laboratories.builder().id(1L).build();
-
-
-               sendToLabRequestDto.getLabTestRequest().forEach( el -> {
-                   LabMicrobiology microbiologyTests = LabMicrobiology.builder()
-                           .labResultsMicrobiology(consultationID3.get())
-                           .doctorID(doctor)
-                           .labDepartment(laboratoryID3)
-                           .patientName(sendToLabRequestDto.getPatientName())
-                           .patientID(patient)
-                           .labTestRequest(el)
-                           .completed(false)
-                           .creationTimestamp(time)
-                           .build();
-
-                   labMicrobiologyRepository.save(microbiologyTests);
-               });
-
-               return  SendToLabResponse.builder()
-                       .status(HttpStatus.CREATED.value())
-                       .message("lab request sent")
-                       .consultationID(key)
-                       .build();
-
-
-           case "ps":
-               consultation.setLabResultsParasitology(key);
-               consultationRepository.save(consultation);
-
-               Optional<Consultation> consultationID4 = consultationRepository.findByLabResultsParasitology(key);
-               if(consultationID4.isEmpty()) throw new MyException(HttpStatus.NOT_FOUND.value(),"consultation id not found");
-
-               Laboratories laboratoryID4 = Laboratories.builder().id(2L).build();
-
-
-               sendToLabRequestDto.getLabTestRequest().forEach( el -> {
-                   LabParasitology parasitologyTests = LabParasitology.builder()
-                           .labResultsParasitology(consultationID4.get())
-                           .doctorID(doctor)
-                           .labDepartment(laboratoryID4)
-                           .patientName(sendToLabRequestDto.getPatientName())
-                           .patientID(patient)
-                           .labTestRequest(el)
-                           .completed(false)
-                           .creationTimestamp(time)
-                           .build();
-
-                   labParasitologyRepository.save(parasitologyTests);
-               });
-
-
-               return  SendToLabResponse.builder()
-                       .status(HttpStatus.CREATED.value())
-                       .message("lab request sent")
-                       .consultationID(key)
-                       .build();
 
            default:
                return  SendToLabResponse.builder()

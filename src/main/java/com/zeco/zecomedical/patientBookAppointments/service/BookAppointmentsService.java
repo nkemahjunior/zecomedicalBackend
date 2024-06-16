@@ -43,19 +43,23 @@ public class BookAppointmentsService {
 
     }*/
 
-    public List<DoctorsAvailableForAppointment> getAllDoctorsAvailableForAppointmentFilterBySpeciality(String speciality){
+    public List<DoctorsAvailableProjection> getAllDoctorsAvailableForAppointmentFilterBySpeciality(String speciality){
 
-       List<Doctors> doctors = doctorsRepository.findBySpeciality(speciality);
+       List<Doctors> doctors = doctorsRepository.findBySpecialityIgnoreCaseContaining(speciality);
 
+       MyDebug.printBlock();
+        System.out.println(doctors);
+        log.error("-----------------------------------------------------------");
+        log.error(speciality);
+        MyDebug.printBlock();
+        MyDebug.printBlock();
 
-
-
-      List<DoctorsAvailableForAppointment> doctorBySpeciality = new ArrayList<>();
+      List<DoctorsAvailableProjection> doctorBySpeciality = new ArrayList<>();
       LocalDateTime today = LocalDateTime.now();
 
       doctors.forEach( el -> {
           //TODO bad work boy, you are suppose to filter while fetching from the database not fetching all before filtering, make and arrange this
-           List<DoctorsAvailableForAppointment> doc = doctorsAvailableRepository.findByDoctorID(el);
+           List<DoctorsAvailableProjection> doc = doctorsAvailableRepository.findByDoctorID(el);
 
 
 
