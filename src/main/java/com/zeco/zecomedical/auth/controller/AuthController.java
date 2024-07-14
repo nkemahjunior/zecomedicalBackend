@@ -9,12 +9,14 @@ import com.zeco.zecomedical.auth.verifyEmail.VerifyEmailService;
 import com.zeco.zecomedical.dto.RequestResponse;
 import com.zeco.zecomedical.dto.UsersRequestDto;
 import com.zeco.zecomedical.dto.UsersResponseDto;
+import com.zeco.zecomedical.general.utils.MyDebug;
 import jakarta.servlet.http.HttpServletRequest;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 @Log4j2
 @RequiredArgsConstructor
 public class AuthController {
+
+    private final Environment env;
 
     private final AuthenticationService authenticationService;
     public  final  VerifyEmailService verifyEmailService;
@@ -51,6 +55,13 @@ public class AuthController {
 
     @GetMapping("/test")
     public ResponseEntity<String> test(){
+
+        MyDebug.printBlock();
+        MyDebug.printBlock();
+        System.out.println(env.getProperty("test"));
+        MyDebug.printBlock();
+        MyDebug.printBlock();
+
         return ResponseEntity.ok("whatttt is happening");
     }
 
