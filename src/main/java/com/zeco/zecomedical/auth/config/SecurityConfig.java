@@ -48,7 +48,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);  http://localhost:5173
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://127.0.0.1:5500"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://127.0.0.1:5500","https://zecomedical.vercel.app"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST","DELETE","PUT"));
         configuration.setAllowedHeaders(Arrays.asList(
 
