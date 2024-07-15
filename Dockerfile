@@ -1,13 +1,12 @@
-FROM bellsoft/liberica-runtime-container:jre-17-cds-slim-glibc as builder
-WORKDIR /builder
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} application.jar
-RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
+FROM eclipse-temurin:17.0.4.1_1-jre as builder
+WORKDIR extracted
+ADD target/*.jar app.jar
+RUN java -Djarmode=layertools -jar app.jar extract
 
-FROM bellsoft/liberica-runtime-container:jre-17-cds-slim-glibc
-WORKDIR /application
-COPY --from=builder /builder/extracted/dependencies/ ./
-COPY --from=builder /builder/extracted/spring-boot-loader/ ./
-COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
-COPY --from=builder /builder/extracted/application/ ./
-ENTRYPOINT ["java", "-jar", "application.jar"]
+FROM eclipse-temurin:17.0.4.1_1-jre
+WORKDIR application
+COPY --from=builder extracted/dependencies/ ./
+COPY --from=builder extracted/spring-boot-loader/ ./
+COPY --from=builder extracted/snapshot-dependencies/ ./
+COPY --from=builder extracted/application/ ./
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
