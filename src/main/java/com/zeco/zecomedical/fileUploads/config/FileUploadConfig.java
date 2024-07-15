@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 @Configuration
 public class FileUploadConfig {
 
@@ -22,6 +23,7 @@ public class FileUploadConfig {
 
     @Bean
     public Cloudinary cloudinary(){
+
         return   new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", cloudName,
                 "api_key", apiKey,
