@@ -33,8 +33,6 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-
-
     @Bean
     public UserDetailsService userDetailsService(){
         return new UsersDetailsServiceImpl();
@@ -75,6 +73,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
 
         http
                 //.sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) this is Default

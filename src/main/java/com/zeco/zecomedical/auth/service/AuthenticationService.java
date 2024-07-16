@@ -30,6 +30,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -162,14 +163,14 @@ public class AuthenticationService {
         HttpSession session = request.getSession(false);//return null instead of creating a new session if there is no available session for the user
 
 
+
+
+
+
+
+
         if( session != null){
 
-
-            MyDebug.printBlock();
-            MyDebug.printBlock();
-            log.error("SEEN THE SESSION");
-            MyDebug.printBlock();
-            MyDebug.printBlock();
 
            String username = request.getUserPrincipal().getName();
            Optional<Users> userData = usersRepository.findByUsername(username);
@@ -196,12 +197,6 @@ public class AuthenticationService {
 
 
         }else{
-
-            MyDebug.printBlock();
-            MyDebug.printBlock();
-            log.error("WHERE THE FUCK IS THE SESSION");
-            MyDebug.printBlock();
-            MyDebug.printBlock();
 
             return  UsersResponseDto.builder()
                     .errorMessage("session expired, login again")
