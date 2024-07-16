@@ -20,6 +20,7 @@ com/zeco/zecomedical/general/projections/patient/doctorsAvailable/DoctorsAvailab
 com/zeco/zecomedical/auth/cors/SpaCsrfTokenRequestHandler.class
 com/zeco/zecomedical/model/LabBloodBank$LabBloodBankBuilder.class
 com/zeco/zecomedical/testAttacks_home_work/Attacks.class
+com/zeco/zecomedical/auth/config/LoggerInterceptor.class
 com/zeco/zecomedical/general/projections/lab/LabRequestProjections.class
 com/zeco/zecomedical/laboratory/controller/LaboratoryController.class
 com/zeco/zecomedical/laboratory/service/LabMicrobiologyService.class
@@ -82,6 +83,7 @@ com/zeco/zecomedical/doctorsPostAppointment/dtos/MyAppointmentsResponse$MyAppoin
 com/zeco/zecomedical/auth/config/SecurityConfig.class
 com/zeco/zecomedical/general/projections/lab/LabBloodBankProjection.class
 com/zeco/zecomedical/general/projections/doctors/appointmentRequest/UsersTable.class
+com/zeco/zecomedical/auth/config/WebConfig.class
 com/zeco/zecomedical/general/projections/lab/ConsultationTable.class
 com/zeco/zecomedical/patientBookAppointments/dtos/AppointmentRequestRequest$AppointmentRequestRequestBuilder.class
 com/zeco/zecomedical/auth/AuthDtos/LogoutRequest.class

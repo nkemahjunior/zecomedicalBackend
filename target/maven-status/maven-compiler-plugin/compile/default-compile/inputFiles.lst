@@ -65,6 +65,7 @@
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/auth/cors/SpaCsrfTokenRequestHandler.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/auth/service/AuthenticationService.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/model/Doctors.java
+/home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/auth/config/WebConfig.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/auth/verifyEmail/VerifyEmailService.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/doctorsPostAppointment/dtos/DoctorsAvailableForAppointmentRequest.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/auth/config/SecurityConfig.java
@@ -106,6 +107,7 @@
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/fileUploads/config/FileUploadConfig.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/ZecomedicalApplication.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/activateAccounts/controller/ActivateAccountController.java
+/home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/auth/config/LoggerInterceptor.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/model/Roles.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/treatmentProcess/dto/WaitingLabResultsRequest.java
 /home/nkemah/Documents/fullStack projects/00-zecomedical/00-zecomedical-backend/src/main/java/com/zeco/zecomedical/doctorsPostAppointment/service/PostAppointmentService.java
