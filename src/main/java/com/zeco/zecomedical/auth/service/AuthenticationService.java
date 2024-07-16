@@ -6,6 +6,7 @@ import com.zeco.zecomedical.auth.AuthDtos.SignupResponseDto;
 import com.zeco.zecomedical.auth.verifyEmail.VerifyEmailService;
 import com.zeco.zecomedical.dto.UsersRequestDto;
 import com.zeco.zecomedical.dto.UsersResponseDto;
+import com.zeco.zecomedical.general.utils.MyDebug;
 import com.zeco.zecomedical.model.Roles;
 import com.zeco.zecomedical.model.Users;
 import com.zeco.zecomedical.general.repositories.UsersRepository;
@@ -163,6 +164,13 @@ public class AuthenticationService {
 
         if( session != null){
 
+
+            MyDebug.printBlock();
+            MyDebug.printBlock();
+            log.error("SEEN THE SESSION");
+            MyDebug.printBlock();
+            MyDebug.printBlock();
+
            String username = request.getUserPrincipal().getName();
            Optional<Users> userData = usersRepository.findByUsername(username);
            if(userData.isEmpty()) throw new RuntimeException("from checkSession method");
@@ -188,6 +196,13 @@ public class AuthenticationService {
 
 
         }else{
+
+            MyDebug.printBlock();
+            MyDebug.printBlock();
+            log.error("WHERE THE FUCK IS THE SESSION");
+            MyDebug.printBlock();
+            MyDebug.printBlock();
+
             return  UsersResponseDto.builder()
                     .errorMessage("session expired, login again")
                     .isAuthenticated(false)
