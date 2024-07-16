@@ -163,12 +163,6 @@ public class AuthenticationService {
         HttpSession session = request.getSession(false);//return null instead of creating a new session if there is no available session for the user
 
 
-
-
-
-
-
-
         if( session != null){
 
 
