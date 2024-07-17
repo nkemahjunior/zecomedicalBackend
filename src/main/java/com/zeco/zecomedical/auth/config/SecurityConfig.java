@@ -6,6 +6,7 @@ import com.zeco.zecomedical.auth.cors.SpaCsrfTokenRequestHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -27,6 +28,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 @Configuration
 @EnableWebSecurity
@@ -74,6 +76,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 
+        CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
+
+        tokenRepository.setCookieCustomizer(new Consumer<ResponseCookie.ResponseCookieBuilder>() {
+
+            @Override
+            public void accept(ResponseCookie.ResponseCookieBuilder t) {
+                t.sameSite("none");
+                t.secure(true);
+                t.httpOnly(false);
+            }
+        });
+
+
+
 
         http
                 //.sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) this is Default
@@ -83,7 +99,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
 
                 ).csrf((csrf) -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRepository(tokenRepository)
                         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)

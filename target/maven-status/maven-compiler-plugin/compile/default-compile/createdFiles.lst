@@ -95,6 +95,7 @@ com/zeco/zecomedical/model/Roles.class
 com/zeco/zecomedical/notification/service/thymeleafConfig/ThymeleafConfig.class
 com/zeco/zecomedical/auth/AuthDtos/SigninRequestDto.class
 com/zeco/zecomedical/general/globalExceptions/GlobalExceptionHandler.class
+com/zeco/zecomedical/auth/config/SecurityConfig$1.class
 com/zeco/zecomedical/general/projections/lab/LabParasitologyProjection.class
 com/zeco/zecomedical/general/projections/doctors/appointmentRequest/MyAppointmentRequestProjections.class
 com/zeco/zecomedical/patientBookAppointments/dtos/AvailableAppointmentsResponse$AvailableAppointmentsResponseBuilder.class
