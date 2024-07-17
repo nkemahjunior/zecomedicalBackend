@@ -30,10 +30,10 @@ public class LoggerInterceptor implements HandlerInterceptor {
             log.info(" LOGGING THE COOKIES");
 
             Arrays.stream(request.getCookies()).forEach(cookie -> {
-                log.info(cookie.getName());
+                /*log.info(cookie.getName());
                 log.info(cookie.getAttributes());
                 log.info(cookie.getValue());
-                log.info(cookie.getDomain());
+                log.info(cookie.getDomain());*/
             });
             log.info("FINISHED LOGGING THE COOKIES");
 
