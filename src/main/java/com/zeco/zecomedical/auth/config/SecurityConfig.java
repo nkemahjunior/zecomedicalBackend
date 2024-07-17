@@ -39,7 +39,6 @@ public class SecurityConfig {
     }
 
 
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
