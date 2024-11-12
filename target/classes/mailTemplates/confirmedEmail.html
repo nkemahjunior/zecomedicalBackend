@@ -1,0 +1,61 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+</head>
+
+
+<body style="font-family:sans-serif;
+font-weight: 400;
+font-style: normal;
+padding: 0px;"
+>
+
+
+<div
+        style="    height: 100dvh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;"
+>
+
+    <div >
+
+        <div
+                style="
+                margin-bottom: 1rem;"
+        >
+            <h1>Zecomedical</h1>
+        </div>
+
+        <h2 > Email verified</h2>
+        <p>Thank you, your email address has been verified. </p>
+        <p>Press continue to set up your account.</p>
+
+        <div
+                style="
+                margin-top: 2rem;"
+        >
+
+            <a th:href=" @{(${setUpAccountUrl})}">
+                <button
+                        style="color: white;
+                         margin-top: 1rem;
+                        border: 0px;
+                        padding: 1rem;
+                        width: 15rem;
+                        background-color: #24312F;
+                        border-radius: 4px;
+                        cursor: pointer;"
+                >Continue</button>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

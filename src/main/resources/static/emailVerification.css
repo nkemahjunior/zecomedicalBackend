@@ -1,0 +1,54 @@
+html{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    padding: 0px;
+
+}
+
+.flex-parent{
+    height: 100dvh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+   
+}
+
+.flex-child{
+   
+}
+
+.logo-parent{
+    height: 4rem;
+    width: 20rem;
+ 
+    margin-bottom: 2rem;
+}
+
+.logo{
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.btn-parent{
+    margin-top: 2rem;
+}
+
+.button{
+    color: white;
+    border: 0px;
+    padding: 1rem;
+    width: 15rem;
+    background-color: #24312F;
+    border-radius: 4px;
+    cursor: pointer;
+   
+}
+
