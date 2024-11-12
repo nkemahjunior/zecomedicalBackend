@@ -95,15 +95,17 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**", "/email/**", "/testEmail", "/static/**").permitAll()
                         .anyRequest().authenticated()
 
-                ).csrf((csrf) -> csrf
+                )/*
+                FRONTEND AND BACKEND NEED TO BE ON THE SAME DOMAIN/ SUB DOMAIN MY BOY
+                .csrf((csrf) -> csrf
                         .csrfTokenRepository(tokenRepository)
-                        //.csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
-                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                                .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
+                        //.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers("/auth/**"));
-        /* .csrf(AbstractHttpConfigurer::disable);*/
+                        .ignoringRequestMatchers("/auth/**"));*/
+         .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
