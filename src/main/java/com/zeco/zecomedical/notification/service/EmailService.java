@@ -7,7 +7,8 @@ import jakarta.mail.internet.InternetAddress;
  import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
- import org.springframework.mail.MailException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
  import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -27,6 +28,9 @@ import java.time.LocalDate;
  @RequiredArgsConstructor
  @Log4j2
  public class EmailService {
+
+     @Value("${app.base-url}")
+     private String baseUrl;
 
      private final JavaMailSender javaMailSender;
      private final TemplateEngine templateEngine;
@@ -48,7 +52,7 @@ import java.time.LocalDate;
 
                  Context context = new Context();
 
-                 context.setVariable("verificationUrl",  "http://localhost:8080/email/confirm-email?token="+token);
+                 context.setVariable("verificationUrl",  baseUrl+"/email/confirm-email?token="+token);
                  String processedString = templateEngine.process("emailVerification", context);
 
                  mimeMessageHelper.setText(processedString, true);

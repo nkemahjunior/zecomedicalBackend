@@ -3,6 +3,7 @@ package com.zeco.zecomedical.notification.service.controller;
 
 import com.zeco.zecomedical.auth.verifyEmail.VerifyEmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,9 @@ import java.util.UUID;
 @RequestMapping("/email")
 public class EmailVerifiedController {
 
+    @Value("${frontend.base-url}")
+    private String frontendBaseUrl;
+
     private  final VerifyEmailService verifyEmailService;
 
     @GetMapping("/confirm-email") ///confirm-email?token=....
@@ -24,7 +28,7 @@ public class EmailVerifiedController {
 
         verifyEmailService.validateEmailToken(( token));
 
-        model.addAttribute("setUpAccountUrl","http://localhost:3000/");
+        model.addAttribute("setUpAccountUrl",frontendBaseUrl);
         return  "confirmedEmail.html";
     }
 
